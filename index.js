@@ -1,5 +1,5 @@
 const express = require('express');
-
+const port = process.env.PORT;
 const app = express();
 
 const custRouters = require('./routes/customers');
@@ -11,6 +11,6 @@ app.get("/", (req, res) => {
 app.use('/customers', custRouters);
 
 
-app.listen(3000, () =>
+app.listen(port, () =>
   console.log('Example app listening on port 3000!'),
 );
