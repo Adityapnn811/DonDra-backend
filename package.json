@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "express": "^4.18.1"
+  },
+  "name": "dondra-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devStart": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adityapnn811/DonDra-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Adityapnn811/DonDra-backend/issues"
+  },
+  "homepage": "https://github.com/Adityapnn811/DonDra-backend#readme",
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
