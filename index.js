@@ -5,7 +5,7 @@ const app = express();
 const custRouters = require('./routes/customers');
 
 app.get("/", (req, res) => {
-    res.send("Hello World");
+    res.send("Berhasil deploy");
 })
 
 app.use('/customers', custRouters);
