@@ -6,7 +6,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest index.test.js",
     "devStart": "nodemon index.js",
     "start": "node index.js"
   },
@@ -23,7 +23,9 @@
   "homepage": "https://github.com/Adityapnn811/DonDra-backend#readme",
   "description": "",
   "devDependencies": {
-    "nodemon": "^2.0.19"
+    "jest": "^28.1.3",
+    "nodemon": "^1.4.1",
+    "supertest": "^6.2.4"
   },
   "engines": {
     "node": "v16.13.1",
