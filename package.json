@@ -6,7 +6,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest app.test.js --detectOpenHandles",
+    "test": "jest app.test.js",
     "devStart": "nodemon index.js",
     "start": "node index.js"
   },
