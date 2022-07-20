@@ -1,1 +1,1 @@
-web: npx tsc npm run start
+web: npm run start
