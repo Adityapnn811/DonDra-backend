@@ -23,8 +23,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: "16.x"
-    - name: Build Typescript
-      run: sudo npm run build
     - name: Install Dependencies
       run: sudo npm install
     - name: Run Jest
