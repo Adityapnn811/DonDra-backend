@@ -24,7 +24,7 @@ jobs:
       with:
         node-version: "16.x"
     - name: Build Typescript
-      run: npx tsc
+      run: sudo npm run build
     - name: Install Dependencies
       run: sudo npm install
     - name: Run Jest
