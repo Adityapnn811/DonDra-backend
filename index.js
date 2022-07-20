@@ -15,7 +15,9 @@ app.get("/test", (_req, res) => {
 
 app.use('/customers', custRouters);
 
+// TO test
+// app.listen(port, () =>
+//   console.log('Example app listening on port 3000!'),
+// );
 
-app.listen(port, () =>
-  console.log('Example app listening on port 3000!'),
-);
+module.exports = app
