@@ -26,6 +26,6 @@ jobs:
       with:
         node-version: "16.x"
     - name: Install Dependencies
-      run: npm install
+      run: sudo npm install
     - name: Run Test
-      run: npm test
+      run: sudo npm test
