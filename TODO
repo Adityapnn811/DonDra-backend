@@ -1,4 +1,4 @@
 Deploy ke heroku dulu setup postgres (udah)
-Setup prisma env (https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-postgres)
+Setup TYPEORM (https://typeorm.io/)
 Buat model database
 Buat database local
