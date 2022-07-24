@@ -31,6 +31,10 @@ AppDataSource.initialize().then(async () => {
         console.log("Console message from the server")
         res.send("Berhasil deploy").status(200);
     })
+
+    app.get("/getUsers", (req, res) => {
+        res.send(users).status(200);
+    })
     
     app.get("/test", (_req, res) => {
       res.status(200).send("Endpoint success");
