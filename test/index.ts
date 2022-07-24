@@ -14,7 +14,7 @@ app.get("/test", (_req, res) => {
 })
 
 app.get("/testDB", (_req, res) => {
-  AppDataSource.initialize().then(async => {
+  AppDataSource.initialize().then(() => {
     res.status(200).send("Database is running and connected");
   }).catch(error => {
     res.status(500).send(error);
