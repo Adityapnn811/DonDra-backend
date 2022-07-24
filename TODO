@@ -1,4 +1,22 @@
 Deploy ke heroku dulu setup postgres (udah)
-Setup TYPEORM (https://typeorm.io/)
-Buat model database
+Setup TYPEORM (https://typeorm.io/) (udah)
+Buat model database (udah)
 Buat database local
+Seeding database (udah, tinggal tambahin kalo mau)
+DOckerize
+Caching (https://typeorm.io/caching)
+Buat endpoint ke semua fungsionalitas
+- get all user
+- approve moneytoring
+- transfer
+- login
+- register
+
+- Tabel Users
+(UserID, Nama, Username (unik), Password, FotoKTP, Role, isVerified, Saldo)
+
+- Tabel Transaksi Transfer
+(UserIdPengirim, UserIdPenerima, Nominal, transferDate)
+
+- Tabel Moneytoring
+(UserId, Nominal, IsIncome, IsVerified, transactionDate)

@@ -1,4 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, ManyToOne, OneToMany } from "typeorm"
+
+export enum UserRole {
+    ADMIN = "admin",
+    USER = "user"
+}
 
 @Entity()
 export class User {
@@ -7,12 +12,35 @@ export class User {
     id: number
 
     @Column()
-    firstName: string
+    nama: string
+
+    @Column({
+        unique: true
+    })
+    username: string
 
     @Column()
-    lastName: string
+    password: string
 
-    @Column()
-    age: number
+    @Column({name: "fotoKTP"})
+    fotoKTP: string
+
+    @Column({
+        type: "enum",
+        enum: UserRole,
+        default: UserRole.USER
+    })
+    role: string
+
+    @Column({
+        default: false
+    })
+    isVerified: boolean
+
+    @Column({
+        default: 0,
+        type: "numeric"
+    })
+    saldo: number
 
 }

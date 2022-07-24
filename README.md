@@ -24,3 +24,7 @@ ssl: true,
         },
     }
 ```
+
+# DESIGN PATTERN
+1. Factory
+Factory digunakan untuk melakukan inisiasi database (seeding)

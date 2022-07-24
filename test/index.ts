@@ -1,4 +1,7 @@
 import express from 'express';
+import "reflect-metadata"
+import { AppDataSource } from "../typeorm/data-source"
+
 const port = process.env.PORT || 3000;
 const app = express();
 
@@ -8,6 +11,14 @@ app.get("/", (req, res) => {
 
 app.get("/test", (_req, res) => {
   res.status(200).send("Endpoint success");
+})
+
+app.get("/testDB", (_req, res) => {
+  AppDataSource.initialize().then(async => {
+    res.status(200).send("Database is running and connected");
+  }).catch(error => {
+    res.status(500).send(error);
+  })
 })
 
 module.exports = app

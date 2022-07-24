@@ -34,11 +34,6 @@ AppDataSource.initialize().then(async () => {
         res.send(users).status(200);
     })
     
-    app.get("/test", (_req, res) => {
-      res.status(200).send("Endpoint success");
-    })
-    
-    
     app.use('/customers', custRouters);
     
     app.listen(port, () =>
