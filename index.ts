@@ -1,23 +1,47 @@
 import express from 'express';
 import "reflect-metadata"
+import { AppDataSource } from "./typeorm/data-source"
+import { User } from "./typeorm/entity/User"
 const port = process.env.PORT || 3000;
 const app = express();
 
 const custRouters = require('./routes/customers');
 
-app.get("/", (req, res) => {
-    res.send("Berhasil deploy");
-})
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
-app.get("/test", (_req, res) => {
-  res.status(200).send("Endpoint success");
-})
+AppDataSource.initialize().then(async () => {
 
+    console.log("Inserting a new user into the database...")
+    const user = new User()
+    user.firstName = "Timber"
+    user.lastName = "Saw"
+    user.age = 25
+    await AppDataSource.manager.save(user)
+    console.log("Saved a new user with id: " + user.id)
 
-app.use('/customers', custRouters);
+    console.log("Loading users from the database...")
+    const users = await AppDataSource.manager.find(User)
+    console.log("Loaded users: ", users)
 
-app.listen(port, () =>
-  console.log('Example app listening on port 3000!'),
-);
+    console.log("Here you can setup and run express / fastify / any other framework.")
+    app.get("/", (req, res) => {
+        res.send("Berhasil deploy");
+    })
+    
+    app.get("/test", (_req, res) => {
+      res.status(200).send("Endpoint success");
+    })
+    
+    
+    app.use('/customers', custRouters);
+    
+    app.listen(port, () =>
+      console.log('Example app listening on port 3000!'),
+    );
+
+}).catch(error => console.log(error))
+console.log(`${process.env.DATABASE_URL}`)
 
 module.exports = app

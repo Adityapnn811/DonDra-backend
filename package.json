@@ -1,6 +1,7 @@
 {
    "dependencies": {
       "chokidar": "^3.5.3",
+      "dotenv": "^16.0.1",
       "express": "^4.18.1",
       "glob-parent": "^6.0.2",
       "pg": "^8.4.0",
@@ -13,7 +14,7 @@
    "scripts": {
       "test": "jest dist/test/app.test.js",
       "devStart": "nodemon index.ts",
-      "start": "ts-node src/index.ts",
+      "start": "node dist/index.js",
       "build": "npx tsc",
       "typeorm": "typeorm-ts-node-commonjs"
    },
@@ -35,8 +36,8 @@
       "jest": "^28.1.3",
       "nodemon": "^1.4.1",
       "supertest": "^6.2.4",
-      "typescript": "4.5.2",
-      "ts-node": "10.7.0"
+      "ts-node": "10.7.0",
+      "typescript": "4.5.2"
    },
    "engines": {
       "node": "v16.13.1",

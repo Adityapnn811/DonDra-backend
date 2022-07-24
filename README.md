@@ -14,4 +14,13 @@ Steps to run this project:
 git push heroku main
 
 # NOTES
-Tambah entity ada di folder `src/entity`
+- Tambah entity ada di folder `src/entity`
+- Buat heroku yang free dan pake typeorm, tambahin snippet ini di data-source.ts
+```
+ssl: true,
+    extra: {
+        ssl: {
+            rejectUnauthorized: false,
+        },
+    }
+```
