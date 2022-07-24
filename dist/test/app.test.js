@@ -17,4 +17,11 @@ describe("/test endpoint", () => {
         expect(response.text).toBe("Endpoint success");
     }));
 });
+describe("/testDB endpooint", () => {
+    it("should return a response", () => __awaiter(this, void 0, void 0, function* () {
+        const response = yield request.get("/testDB");
+        expect(response.status).toBe(200);
+        expect(response.text).toBe("Database is running and connected");
+    }));
+});
 //# sourceMappingURL=app.test.js.map

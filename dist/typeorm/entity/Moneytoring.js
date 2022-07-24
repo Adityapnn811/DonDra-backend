@@ -9,60 +9,41 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = exports.UserRole = void 0;
+exports.Moneytoring = void 0;
 const typeorm_1 = require("typeorm");
-var UserRole;
-(function (UserRole) {
-    UserRole["ADMIN"] = "admin";
-    UserRole["USER"] = "user";
-})(UserRole = exports.UserRole || (exports.UserRole = {}));
-let User = class User {
+const User_1 = require("./User");
+let Moneytoring = class Moneytoring {
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], User.prototype, "id", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], User.prototype, "nama", void 0);
+], Moneytoring.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({
-        unique: true
+        type: "numeric"
     }),
-    __metadata("design:type", String)
-], User.prototype, "username", void 0);
+    __metadata("design:type", Number)
+], Moneytoring.prototype, "nominal", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], User.prototype, "password", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ name: "fotoKTP" }),
-    __metadata("design:type", String)
-], User.prototype, "fotoKTP", void 0);
-__decorate([
-    (0, typeorm_1.Column)({
-        type: "enum",
-        enum: UserRole,
-        default: UserRole.USER
-    }),
-    __metadata("design:type", String)
-], User.prototype, "role", void 0);
+    __metadata("design:type", Boolean)
+], Moneytoring.prototype, "isIncome", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         default: false
     }),
     __metadata("design:type", Boolean)
-], User.prototype, "isVerified", void 0);
+], Moneytoring.prototype, "isVerified", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        default: 0,
-        type: "numeric"
-    }),
-    __metadata("design:type", Number)
-], User.prototype, "saldo", void 0);
-User = __decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", Date)
+], Moneytoring.prototype, "transactionDate", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => User_1.User),
+    __metadata("design:type", User_1.User)
+], Moneytoring.prototype, "user", void 0);
+Moneytoring = __decorate([
     (0, typeorm_1.Entity)()
-], User);
-exports.User = User;
-//# sourceMappingURL=User.js.map
+], Moneytoring);
+exports.Moneytoring = Moneytoring;
+//# sourceMappingURL=Moneytoring.js.map
