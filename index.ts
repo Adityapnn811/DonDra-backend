@@ -28,7 +28,8 @@ AppDataSource.initialize().then(async () => {
     console.log("Here you can setup and run express / fastify / any other framework.")
     app.get("/", (req, res) => {
         console.log("Loaded users: ", users)
-        res.send("Berhasil deploy");
+        console.log("Console message from the server")
+        res.send("Berhasil deploy").status(200);
     })
     
     app.get("/test", (_req, res) => {
