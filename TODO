@@ -10,7 +10,7 @@ Buat endpoint ke semua fungsionalitas
 - approve moneytoring
 - transfer
 - login
-- register
+- register (udah, udah hash, udah cek username)
 
 - Tabel Users
 (UserID, Nama, Username (unik), Password, FotoKTP, Role, isVerified, Saldo)

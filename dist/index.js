@@ -15,10 +15,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 require("reflect-metadata");
 const data_source_1 = require("./typeorm/data-source");
-const User_1 = require("./typeorm/entity/User");
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const app = (0, express_1.default)();
-const custRouters = require('./routes/customers');
+const registerRouters = require('./routes/register');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json({ limit: '50mb' });
+app.use(jsonParser);
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
@@ -30,18 +38,18 @@ data_source_1.AppDataSource.initialize().then(() => __awaiter(void 0, void 0, vo
     // user.age = 25
     // await AppDataSource.manager.save(user)
     // console.log("Saved a new user with id: " + user.id)
-    console.log("Loading users from the database...");
-    const users = yield data_source_1.AppDataSource.manager.find(User_1.User);
-    console.log("Loaded users: ", users);
+    // console.log("Loading users from the database...")
+    // const users = await AppDataSource.manager.find(User)
+    // console.log("Loaded users: ", users)
     console.log("Here you can setup and run express / fastify / any other framework.");
     app.get("/", (req, res) => {
         res.send("Berhasil deploy").status(200);
     });
-    app.get("/getUsers", (req, res) => {
-        res.send(users).status(200);
-    });
-    app.use('/customers', custRouters);
-    app.listen(port, () => console.log('Example app listening on port 3000!'));
+    // app.get("/getUsers", (req, res) => {
+    //     res.send(users).status(200);
+    // })
+    app.use('/register', registerRouters);
+    app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 })).catch(error => console.log(error));
 console.log(`${process.env.DATABASE_URL}`);
 module.exports = app;
