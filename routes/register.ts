@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
     const body = (req.body);
     // check if something is missing from body
     if (!body.username || !body.password || !body.nama || !body.fotoKTP) {
-        res.status(400).send("Data is not complete");
+        res.status(400).json({error: "Data is not complete, server couldn't parse it"});
         return;
     }
     
@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
     userToBeRegistered.nama = body.nama;
     // check if username already exists (belom)
     if (await userRepo.findOneBy({ username: body.username })) {
-        res.status(400).send("Username already exists");
+        res.status(400).json({error: "Username already exists"});
         return;
     }
     userToBeRegistered.username = body.username;
