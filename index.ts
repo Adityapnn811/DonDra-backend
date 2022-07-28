@@ -21,7 +21,7 @@ const corsOptions = {
   origin: ['http://localhost:3000', 'http://localhost:3001'],
   optionsSuccessStatus: 200 
 }
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Check if it's production
 if (process.env.NODE_ENV !== 'production') {
