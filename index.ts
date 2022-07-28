@@ -21,7 +21,7 @@ const corsOptions = {
   origin: 'https://dondra.vercel.app',
   optionsSuccessStatus: 200 
 }
-app.use(cors(corsOptions));
+app.use(cors({origin: '*'}));
 
 // Check if it's production
 if (process.env.NODE_ENV !== 'production') {
