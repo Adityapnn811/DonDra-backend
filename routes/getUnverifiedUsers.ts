@@ -16,7 +16,11 @@ router.get('/', async (req, res) => {
         console.log(decoded.username)
         if (decoded) {
             const userRepo = AppDataSource.getRepository(User);
-            const users = await userRepo.find();
+            const users = await userRepo.find({
+                where: {
+                    isVerified: false
+                }
+            });
             res.status(200).json(users);
         } else {
             res.status(400).json({error: "Invalid token"});
