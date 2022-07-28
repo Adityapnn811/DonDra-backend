@@ -1,23 +1,45 @@
 import express from 'express';
+import { Session } from 'inspector';
 import "reflect-metadata"
 import { AppDataSource } from "./typeorm/data-source"
 import { User } from "./typeorm/entity/User"
 const port = process.env.PORT || 3001;
 const app = express();
-const registerRouters = require('./routes/register');
 const cors = require('cors');
+const sessions = require('express-session')
+const cookieParser = require('cookie-parser')
+// parser for json from req body
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json({limit: '50mb'});
+const registerRouters = require('./routes/register');
+const loginRouters = require('./routes/login');
+
 
 app.use(jsonParser)
 
+// cors options for front end
 const corsOptions = {
   origin: 'http://localhost:3000',
   optionsSuccessStatus: 200 
 }
-
 app.use(cors(corsOptions));
 
+// Session options for cookies and login
+// create 24 hour in miliseconds
+const sessionAge = 24 * 60 * 60 * 1000;
+app.use(sessions({
+  secret: "dondraforbinomo",
+  saveUninitialized: true,
+  cookie: {
+    maxAge: sessionAge
+  },
+  resave: false
+}))
+
+// Use cookieParser to parse cookies
+app.use(cookieParser())
+
+// Check if it's production
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
@@ -46,6 +68,7 @@ AppDataSource.initialize().then(async () => {
     // })
     
     app.use('/register', registerRouters);
+    app.use('/login', loginRouters);
     
     app.listen(port, () =>
       console.log(`Example app listening on port ${port}!`),

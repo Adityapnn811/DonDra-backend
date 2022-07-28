@@ -3,13 +3,13 @@ Setup TYPEORM (https://typeorm.io/) (udah)
 Buat model database (udah)
 Buat database local
 Seeding database (udah, tinggal tambahin kalo mau)
-DOckerize
+DOCKERIZEEE!!!
 Caching (https://typeorm.io/caching)
 Buat endpoint ke semua fungsionalitas
 - get all user
 - approve moneytoring
 - transfer
-- login
+- login (kurang jwt dan nyambungin ke frontend, kurang cek apakah udah verified atau belum)
 - register (udah, udah hash, udah cek username)
 
 - Tabel Users
@@ -20,3 +20,6 @@ Buat endpoint ke semua fungsionalitas
 
 - Tabel Moneytoring
 (UserId, Nominal, IsIncome, IsVerified, transactionDate)
+
+Design pattern:
+- Singleton (jwt)

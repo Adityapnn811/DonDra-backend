@@ -14,27 +14,27 @@ const data_source_1 = require("../typeorm/data-source");
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const body = req.body;
     const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-    const userToBeRegistered = new User_1.User();
-    const body = (req.body);
-    // check if something is missing from body
-    if (!body.username || !body.password || !body.nama || !body.fotoKTP) {
-        res.status(400).send("Data is not complete");
-        return;
+    const userToCheck = yield userRepo.findOneBy({ username: body.username }); // find user by username
+    if (userToCheck) {
+        // check if password is correct
+        const correctPass = yield bcrypt.compare(body.password, userToCheck.password);
+        if (correctPass) {
+            // create jwt token
+            let token = jwt.sign({ username: userToCheck.username }, 'dondraforbinomo', { expiresIn: '24h' });
+            // send succes status and token so front end can save it in a cookie
+            res.status(200).json({ message: "Login success", user: userToCheck, success: true, token: token });
+        }
+        else {
+            res.status(400).json({ error: "Wrong Password or Username" });
+        }
     }
-    const salt = yield bcrypt.genSalt(10);
-    userToBeRegistered.nama = body.nama;
-    // check if username already exists (belom)
-    if (yield userRepo.findOneBy({ username: body.username })) {
-        res.status(400).send("Username already exists");
-        return;
+    else {
+        res.status(401).json({ error: "Wrong Password or Username" });
     }
-    userToBeRegistered.username = body.username;
-    userToBeRegistered.password = yield bcrypt.hash(body.password, salt);
-    userToBeRegistered.fotoKTP = body.fotoKTP;
-    userRepo.save(userToBeRegistered);
-    res.send(userToBeRegistered).status(200);
 }));
 module.exports = router;
-//# sourceMappingURL=register.js.map
+//# sourceMappingURL=login.js.map

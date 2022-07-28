@@ -2,18 +2,22 @@ import "reflect-metadata"
 import { AppDataSource } from "./data-source"
 import { User, UserRole } from "./entity/User"
 import { Moneytoring } from "./entity/Moneytoring";
+const bcrypt = require('bcrypt');
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
 AppDataSource.initialize().then(async () => {
+    //generate salt
+    const salt = await bcrypt.genSalt(10);
+
     // create user repo
     const userRepo = AppDataSource.getRepository(User)
     let user = new User()
     user.nama = "Admin Ganteng"
     user.username = "admin"
-    user.password = "admin"
+    user.password = await bcrypt.hash("admin", salt);
     user.fotoKTP = "gambar"
     user.role = UserRole.ADMIN
     user.isVerified = true
@@ -24,7 +28,7 @@ AppDataSource.initialize().then(async () => {
     user = new User()
     user.nama = "User Ganteng"
     user.username = "usergans"
-    user.password = "usergans"
+    user.password = await bcrypt.hash("usergans", salt);
     user.fotoKTP = "gambar"
     user.role = UserRole.USER
     user.saldo = 100000

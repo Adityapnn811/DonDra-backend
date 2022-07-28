@@ -12,6 +12,7 @@ router.post("/", async (req, res) => {
     // check if something is missing from body
     if (!body.username || !body.password || !body.nama || !body.fotoKTP) {
         res.status(400).send("Data is not complete");
+        return;
     }
     
     const salt = await bcrypt.genSalt(10);
