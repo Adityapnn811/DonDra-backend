@@ -25,7 +25,7 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const correctPass = yield bcrypt.compare(body.password, userToCheck.password);
         if (correctPass && userToCheck.isVerified) {
             // create jwt token
-            let token = jwt.sign({ username: userToCheck.username }, 'dondraforbinomo', { expiresIn: '24h' });
+            let token = jwt.sign({ username: userToCheck.username }, "dondraforbinomo", { expiresIn: '24h' });
             // send succes status and token so front end can save it in a cookie
             res.status(200).json({ message: "Login success", user: userToCheck, success: true, token: token });
         }

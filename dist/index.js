@@ -18,33 +18,19 @@ const data_source_1 = require("./typeorm/data-source");
 const port = process.env.PORT || 3001;
 const app = (0, express_1.default)();
 const cors = require('cors');
-const sessions = require('express-session');
-const cookieParser = require('cookie-parser');
 // parser for json from req body
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json({ limit: '50mb' });
 const registerRouters = require('./routes/register');
 const loginRouters = require('./routes/login');
+const getUnverifiedUsersRouters = require('./routes/getUnverifiedUsers');
 app.use(jsonParser);
 // cors options for front end
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'http://localhost:3001'],
     optionsSuccessStatus: 200
 };
-app.use(cors(corsOptions));
-// Session options for cookies and login
-// create 24 hour in miliseconds
-const sessionAge = 24 * 60 * 60 * 1000;
-app.use(sessions({
-    secret: "dondraforbinomo",
-    saveUninitialized: true,
-    cookie: {
-        maxAge: sessionAge
-    },
-    resave: false
-}));
-// Use cookieParser to parse cookies
-app.use(cookieParser());
+app.use(cors());
 // Check if it's production
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -69,6 +55,7 @@ data_source_1.AppDataSource.initialize().then(() => __awaiter(void 0, void 0, vo
     // })
     app.use('/register', registerRouters);
     app.use('/login', loginRouters);
+    app.use('/getUnverifiedUsers', getUnverifiedUsersRouters);
     app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 })).catch(error => console.log(error));
 console.log(`${process.env.DATABASE_URL}`);

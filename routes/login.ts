@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
         if (correctPass && userToCheck.isVerified) {
             // create jwt token
             let token = jwt.sign({username: userToCheck.username}, 
-                'dondraforbinomo',
+                "dondraforbinomo",
                 {expiresIn: '24h'}
                 );
             // send succes status and token so front end can save it in a cookie

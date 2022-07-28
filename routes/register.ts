@@ -32,6 +32,7 @@ router.post("/", async (req, res) => {
 
     // convert base64 to png
     const base64Data = body.fotoKTP.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+    // save image to image path
     fs.writeFileSync(imagePath, base64Data, {encoding: 'base64'});
 
     userRepo.save(userToBeRegistered)

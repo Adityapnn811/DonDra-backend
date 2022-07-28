@@ -38,6 +38,7 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     userToBeRegistered.fotoKTP = body.fotoKTP;
     // convert base64 to png
     const base64Data = body.fotoKTP.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+    // save image to image path
     fs.writeFileSync(imagePath, base64Data, { encoding: 'base64' });
     userRepo.save(userToBeRegistered);
     res.send(userToBeRegistered).status(200);
