@@ -18,7 +18,7 @@ app.use(jsonParser)
 
 // cors options for front end
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'https://dondra.vercel.app',
   optionsSuccessStatus: 200 
 }
 app.use(cors(corsOptions));
