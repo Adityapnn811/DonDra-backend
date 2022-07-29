@@ -79,7 +79,7 @@ AppDataSource.initialize().then(async () => {
     app.use('/login', loginRouters);
     app.use('/getUnverifiedUsers', getUnverifiedUsersRouters);
     app.use('/verifyUser', verifyUserRouters);
-    app.use('/getAllUser', getAllUsersRouters);
+    app.use('/getAllUsers', getAllUsersRouters);
     
     app.listen(port, () =>
       console.log(`Example app listening on port ${port}!`),
