@@ -18,11 +18,14 @@ app.use(jsonParser)
 
 // cors options for front end
 const corsOptions = {
-  origin: 'https://dondra.vercel.app',
-  optionsSuccessStatus: 200 
+  "origin": ['https://dondra.vercel.app', 'http://localhost:3000'],
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "preflightContinue": false,
+  "allowedHeaders": ['Content-Type', 'Authorization', 'Accept'],
+  "optionsSuccessStatus": 200 
 }
-app.use(cors({origin: '*'}));
-app.options('*', cors())
+app.use(cors(corsOptions));
+// app.options('*', cors(corsOptions))
 
 // Check if it's production
 if (process.env.NODE_ENV !== 'production') {
