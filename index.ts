@@ -21,7 +21,7 @@ const corsOptions = {
   origin: ['https://dondra.vercel.app', 'http://localhost:3000'],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   preflightContinue: false,
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Access-Control-Allow-Origin'],
   optionsSuccessStatus: 200 
 }
 app.use(cors(corsOptions));
