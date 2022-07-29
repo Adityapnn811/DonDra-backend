@@ -15,7 +15,18 @@ router.get('/', cors(), async (req, res) => {
         console.log(decoded.username)
         if (decoded) {
             const userRepo = AppDataSource.getRepository(User);
-            const users = await userRepo.find()
+            const users = await userRepo.find({
+                select: {
+                    id: true,
+                    nama: true,
+                    username: true,
+                    fotoKTP: true,
+                    isVerified: true,
+                    saldo: true,
+                }, where: {
+                    role: "user"
+                }
+            })
             res.status(200).json(users);
         } else {
             res.status(400).json({error: "Invalid token"});
