@@ -22,6 +22,7 @@ const corsOptions = {
   optionsSuccessStatus: 200 
 }
 app.use(cors({origin: '*'}));
+app.options('*', cors())
 
 // Check if it's production
 if (process.env.NODE_ENV !== 'production') {
