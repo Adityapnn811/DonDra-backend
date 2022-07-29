@@ -12,6 +12,7 @@ const jsonParser = bodyParser.json({limit: '50mb'});
 const registerRouters = require('./routes/register');
 const loginRouters = require('./routes/login');
 const getUnverifiedUsersRouters = require('./routes/getUnverifiedUsers');
+const verifyUserRouters = require('./routes/verifyUser');
 
 
 app.use(jsonParser)
@@ -76,6 +77,7 @@ AppDataSource.initialize().then(async () => {
     app.use('/register', registerRouters);
     app.use('/login', loginRouters);
     app.use('/getUnverifiedUsers', getUnverifiedUsersRouters);
+    app.use('/verifyUser', verifyUserRouters);
     
     app.listen(port, () =>
       console.log(`Example app listening on port ${port}!`),

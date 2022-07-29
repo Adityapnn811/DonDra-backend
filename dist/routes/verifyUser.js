@@ -13,12 +13,12 @@ const User_1 = require("../typeorm/entity/User");
 const data_source_1 = require("../typeorm/data-source");
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const fs = require('fs');
 const cors = require('cors');
-// Return semua user tapi cek dulu ada authorization tokennya ngga
-router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const jwt = require('jsonwebtoken');
+router.post("/:id", cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers.authorization.split(" ")[1];
-    console.log("Ini token", token);
     if (!token) {
         res.status(400).json({ error: "No token provided" });
     }
@@ -26,13 +26,14 @@ router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function
         const decoded = jwt.verify(token, "dondraforbinomo");
         console.log(decoded.username);
         if (decoded) {
+            const { id } = req.params;
             const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-            const users = yield userRepo.find({
-                where: {
-                    isVerified: false
-                }
+            const userToBeVerified = yield userRepo.findOneBy({
+                id: id
             });
-            res.status(200).json(users);
+            userToBeVerified.isVerified = true;
+            yield userRepo.save(userToBeVerified);
+            res.status(200).send({ success: true, message: "User has been verified" });
         }
         else {
             res.status(400).json({ error: "Invalid token" });
@@ -40,4 +41,4 @@ router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 }));
 module.exports = router;
-//# sourceMappingURL=getUnverifiedUsers.js.map
+//# sourceMappingURL=verifyUser.js.map
