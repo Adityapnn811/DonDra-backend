@@ -19,6 +19,13 @@ router.get('/', cors(), async (req, res) => {
             const users = await userRepo.find({
                 where: {
                     isVerified: false
+                }, select: {
+                    id: true,
+                    nama: true,
+                    username: true,
+                    fotoKTP: true,
+                    isVerified: true,
+                    saldo: true,
                 }
             });
             res.status(200).json(users);
