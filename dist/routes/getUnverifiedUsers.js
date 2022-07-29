@@ -27,7 +27,11 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.log(decoded.username);
         if (decoded) {
             const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-            const users = yield userRepo.find();
+            const users = yield userRepo.find({
+                where: {
+                    isVerified: false
+                }
+            });
             res.status(200).json(users);
         }
         else {

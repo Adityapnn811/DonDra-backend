@@ -26,11 +26,28 @@ const loginRouters = require('./routes/login');
 const getUnverifiedUsersRouters = require('./routes/getUnverifiedUsers');
 app.use(jsonParser);
 // cors options for front end
+app.use(function (req, res, next) {
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000, https://dondra.vercel.app/');
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    // Pass to next layer of middleware
+    next();
+});
 const corsOptions = {
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: ['https://dondra.vercel.app', 'http://localhost:3000'],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Access-Control-Allow-Origin'],
     optionsSuccessStatus: 200
 };
-app.use(cors());
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 // Check if it's production
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();

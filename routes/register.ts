@@ -4,9 +4,10 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const fs = require('fs')
+const cors = require('cors');
 
 
-router.post("/", async (req, res) => {
+router.post("/", cors(), async (req, res) => {
     const userRepo = AppDataSource.getRepository(User);
     const userToBeRegistered = new User();
     const body = (req.body);

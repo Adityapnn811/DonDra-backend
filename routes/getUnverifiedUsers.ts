@@ -4,9 +4,10 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 // Return semua user tapi cek dulu ada authorization tokennya ngga
-router.get('/', async (req, res) => {
+router.get('/', cors(), async (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     console.log("Ini token", token)
     if (!token) {

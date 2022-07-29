@@ -4,8 +4,9 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
-router.post("/", async (req, res) => {
+router.post("/", cors(), async (req, res) => {
     const body = req.body;
     const userRepo = AppDataSource.getRepository(User);
     const userToCheck = await userRepo.findOneBy({ username: body.username }) // find user by username
