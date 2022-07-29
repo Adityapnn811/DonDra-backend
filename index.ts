@@ -13,6 +13,7 @@ const registerRouters = require('./routes/register');
 const loginRouters = require('./routes/login');
 const getUnverifiedUsersRouters = require('./routes/getUnverifiedUsers');
 const verifyUserRouters = require('./routes/verifyUser');
+const getAllUsersRouters = require('./routes/getAllUsers');
 
 
 app.use(jsonParser)
@@ -78,6 +79,7 @@ AppDataSource.initialize().then(async () => {
     app.use('/login', loginRouters);
     app.use('/getUnverifiedUsers', getUnverifiedUsersRouters);
     app.use('/verifyUser', verifyUserRouters);
+    app.use('/getAllUser', getAllUsersRouters);
     
     app.listen(port, () =>
       console.log(`Example app listening on port ${port}!`),
