@@ -24,12 +24,6 @@ router.get("/:id", cors(), async (req, res) => {
                     id: id,
                     isVerified: true
                 }
-            }).catch(err => {
-                if (isQueryFailedError(err)) {
-                    res.status(400).json({error: "User not found"});
-                } else {
-                    res.status(400).json({error: "Something went wrong"});
-                }
             })
             if (userToBeChecked) {
                 res.status(200).send({success: true, message: "User is Valid", userName: userToBeChecked.nama});
