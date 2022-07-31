@@ -3,7 +3,6 @@ Setup TYPEORM (https://typeorm.io/) (udah)
 Buat model database (udah)
 Buat database local
 Seeding database (udah, tinggal tambahin kalo mau)
-DOCKERIZEEE!!!
 Caching (https://typeorm.io/caching)
 Buat endpoint ke semua fungsionalitas
 - get all user
@@ -11,6 +10,8 @@ Buat endpoint ke semua fungsionalitas
 - transfer
 - login (kurang jwt dan nyambungin ke frontend, kurang cek apakah udah verified atau belum)
 - register (udah, udah hash, udah cek username)
+- get all history
+DOCKERIZEEE!!!
 
 - Tabel Users
 (UserID, Nama, Username (unik), Password, FotoKTP, Role, isVerified, Saldo)
@@ -23,3 +24,5 @@ Buat endpoint ke semua fungsionalitas
 
 Design pattern:
 - Singleton (jwt)
+- Observer database
+- Factory seeding

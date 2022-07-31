@@ -17,6 +17,7 @@ const getAllUsersRouters = require('./routes/getAllUsers');
 const exchangeRateRouters = require('./routes/exchangeRate');
 const checkUserRouters = require('./routes/checkUser');
 const getSaldoRouters = require('./routes/getSaldo');
+const transferRouters = require('./routes/transfer');
 
 
 app.use(jsonParser)
@@ -73,6 +74,7 @@ AppDataSource.initialize().then(async () => {
     app.use('/exchangeRate', exchangeRateRouters);
     app.use('/checkUser', checkUserRouters);
     app.use('/getSaldo', getSaldoRouters);
+    app.use('/transfer', transferRouters);
 
     app.listen(port, () =>
       console.log(`Example app listening on port ${port}!`),
