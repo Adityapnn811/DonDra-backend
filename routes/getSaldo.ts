@@ -18,7 +18,7 @@ router.get("/:id", cors(), async (req, res) => {
                 id: id
             })
             if (userToBeChecked) {
-                res.status(200).send({success: true, message: "User is Valid", saldo: userToBeChecked.saldo});
+                res.status(200).json({success: true, message: "User is Valid", saldo: userToBeChecked.saldo});
             }
         } else {
             res.status(400).json({error: "Invalid token"});
