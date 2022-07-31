@@ -18,7 +18,6 @@ const cors = require('cors');
 // Return semua user tapi cek dulu ada authorization tokennya ngga
 router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers.authorization.split(" ")[1];
-    console.log("Ini token", token);
     if (!token) {
         res.status(400).json({ error: "No token provided" });
     }
@@ -28,15 +27,15 @@ router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function
         if (decoded) {
             const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
             const users = yield userRepo.find({
-                where: {
-                    isVerified: false
-                }, select: {
+                select: {
                     id: true,
                     nama: true,
                     username: true,
                     fotoKTP: true,
                     isVerified: true,
                     saldo: true,
+                }, where: {
+                    role: "user"
                 }
             });
             res.status(200).json(users);
@@ -47,4 +46,4 @@ router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 }));
 module.exports = router;
-//# sourceMappingURL=getUnverifiedUsers.js.map
+//# sourceMappingURL=getAllUsers.js.map

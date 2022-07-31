@@ -25,6 +25,9 @@ const registerRouters = require('./routes/register');
 const loginRouters = require('./routes/login');
 const getUnverifiedUsersRouters = require('./routes/getUnverifiedUsers');
 const verifyUserRouters = require('./routes/verifyUser');
+const getAllUsersRouters = require('./routes/getAllUsers');
+const exchangeRateRouters = require('./routes/exchangeRate');
+const checkUserRouters = require('./routes/checkUser');
 app.use(jsonParser);
 // cors options for front end
 app.use(function (req, res, next) {
@@ -53,30 +56,20 @@ app.options('*', cors(corsOptions));
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
+// initialize redis
 data_source_1.AppDataSource.initialize().then(() => __awaiter(void 0, void 0, void 0, function* () {
-    // console.log("Inserting a new user into the database...")
-    // const user = new User()
-    // user.firstName = "Timber"
-    // user.lastName = "Saw"
-    // user.age = 25
-    // await AppDataSource.manager.save(user)
-    // console.log("Saved a new user with id: " + user.id)
-    // console.log("Loading users from the database...")
-    // const users = await AppDataSource.manager.find(User)
-    // console.log("Loaded users: ", users)
     console.log("Here you can setup and run express / fastify / any other framework.");
     app.get("/", (req, res) => {
         res.send("Berhasil deploy").status(200);
     });
-    // app.get("/getUsers", (req, res) => {
-    //     res.send(users).status(200);
-    // })
     app.use('/register', registerRouters);
     app.use('/login', loginRouters);
     app.use('/getUnverifiedUsers', getUnverifiedUsersRouters);
     app.use('/verifyUser', verifyUserRouters);
+    app.use('/getAllUsers', getAllUsersRouters);
+    app.use('/exchangeRate', exchangeRateRouters);
+    app.use('/checkUser', checkUserRouters);
     app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 })).catch(error => console.log(error));
-console.log(`${process.env.DATABASE_URL}`);
 module.exports = app;
 //# sourceMappingURL=index.js.map

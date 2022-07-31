@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const app = require("./index");
 const supertest = require("supertest");
 const request = supertest(app);
+jest.setTimeout(30000);
 describe("/test endpoint", () => {
     it("should return a response", () => __awaiter(this, void 0, void 0, function* () {
         const response = yield request.get("/test");
@@ -17,7 +18,7 @@ describe("/test endpoint", () => {
         expect(response.text).toBe("Endpoint success");
     }));
 });
-describe("/testDB endpooint", () => {
+describe("/testDB endpoint", () => {
     it("should return a response", () => __awaiter(this, void 0, void 0, function* () {
         const response = yield request.get("/testDB");
         expect(response.status).toBe(200);

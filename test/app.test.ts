@@ -2,6 +2,7 @@ const app = require("./index")
 const supertest = require("supertest")
 const request = supertest(app)
 
+jest.setTimeout(30000)
 describe("/test endpoint", () => {
     it("should return a response", async () => {
         const response = await request.get("/test")
@@ -10,7 +11,7 @@ describe("/test endpoint", () => {
     })
 })
 
-describe("/testDB endpooint", () => {
+describe("/testDB endpoint", () => {
     it("should return a response", async () => {
         const response = await request.get("/testDB")
         expect(response.status).toBe(200)

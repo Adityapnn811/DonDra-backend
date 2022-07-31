@@ -6,8 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 require("reflect-metadata");
 const data_source_1 = require("../typeorm/data-source");
+const Redis = require('ioredis');
 const port = process.env.PORT || 3000;
 const app = (0, express_1.default)();
+// initialize redis
+let redisClient = new Redis(process.env.REDIS_URL);
 app.get("/", (req, res) => {
     res.send("Berhasil deploy");
 });

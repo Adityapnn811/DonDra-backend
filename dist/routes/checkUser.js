@@ -9,37 +9,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isQueryFailedError = void 0;
 const User_1 = require("../typeorm/entity/User");
 const data_source_1 = require("../typeorm/data-source");
+const typeorm_1 = require("typeorm");
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 const cors = require('cors');
-// Return semua user tapi cek dulu ada authorization tokennya ngga
-router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const jwt = require('jsonwebtoken');
+const isQueryFailedError = (err) => err instanceof typeorm_1.QueryFailedError;
+exports.isQueryFailedError = isQueryFailedError;
+router.get("/:id", cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers.authorization.split(" ")[1];
-    console.log("Ini token", token);
     if (!token) {
         res.status(400).json({ error: "No token provided" });
     }
     else {
         const decoded = jwt.verify(token, "dondraforbinomo");
-        console.log(decoded.username);
         if (decoded) {
+            const { id } = req.params;
             const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-            const users = yield userRepo.find({
-                where: {
-                    isVerified: false
-                }, select: {
-                    id: true,
-                    nama: true,
-                    username: true,
-                    fotoKTP: true,
-                    isVerified: true,
-                    saldo: true,
+            const userToBeChecked = yield userRepo.findOneBy({
+                id: id
+            }).catch(err => {
+                if ((0, exports.isQueryFailedError)(err)) {
+                    res.status(400).json({ error: "User not found" });
+                }
+                else {
+                    res.status(400).json({ error: "Something went wrong" });
                 }
             });
-            res.status(200).json(users);
+            if (userToBeChecked) {
+                res.status(200).send({ success: true, message: "User is Valid", userName: userToBeChecked.nama });
+            }
         }
         else {
             res.status(400).json({ error: "Invalid token" });
@@ -47,4 +49,4 @@ router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 }));
 module.exports = router;
-//# sourceMappingURL=getUnverifiedUsers.js.map
+//# sourceMappingURL=checkUser.js.map
