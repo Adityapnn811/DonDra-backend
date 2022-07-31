@@ -28,6 +28,7 @@ const verifyUserRouters = require('./routes/verifyUser');
 const getAllUsersRouters = require('./routes/getAllUsers');
 const exchangeRateRouters = require('./routes/exchangeRate');
 const checkUserRouters = require('./routes/checkUser');
+const getSaldoRouters = require('./routes/getSaldo');
 app.use(jsonParser);
 // cors options for front end
 app.use(function (req, res, next) {
@@ -69,6 +70,7 @@ data_source_1.AppDataSource.initialize().then(() => __awaiter(void 0, void 0, vo
     app.use('/getAllUsers', getAllUsersRouters);
     app.use('/exchangeRate', exchangeRateRouters);
     app.use('/checkUser', checkUserRouters);
+    app.use('/getSaldo', getSaldoRouters);
     app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 })).catch(error => console.log(error));
 module.exports = app;
