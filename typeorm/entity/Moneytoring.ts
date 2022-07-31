@@ -6,8 +6,9 @@ export class Moneytoring {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({
-        type: "numeric"
+    @Column("decimal", {
+        precision: 10,
+        scale: 2
     })
     nominal: number
     

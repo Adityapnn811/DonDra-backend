@@ -12,8 +12,9 @@ export class Transfer {
     @ManyToOne(() => User)
     userIDPenerima: number
 
-    @Column({
-        type: "numeric"
+    @Column("decimal", {
+        precision: 10,
+        scale: 2
     })
     nominal: number
 

@@ -37,9 +37,10 @@ export class User {
     })
     isVerified: boolean
 
-    @Column({
-        default: 0,
-        type: "numeric"
+    @Column("decimal", {
+        default: 0.0,
+        precision: 10,
+        scale: 2
     })
     saldo: number
 

@@ -29,7 +29,7 @@ router.get("/:id", cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
                 id: id
             });
             if (userToBeChecked) {
-                res.status(200).send({ success: true, message: "User is Valid", saldo: userToBeChecked.saldo });
+                res.status(200).json(userToBeChecked);
             }
         }
         else {

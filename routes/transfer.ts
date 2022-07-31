@@ -8,14 +8,12 @@ const cors = require('cors');
 
 // Langsung transfer sekalian masukin history transfer
 // Apakah ini Decorator?
-router.get('/', cors(), async (req, res) => {
+router.post('/', cors(), async (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
-    console.log("Ini token", token)
     if (!token) {
         res.status(400).json({error: "No token provided"});
     } else {
         const decoded = jwt.verify(token, "dondraforbinomo");
-        console.log(decoded.username)
         if (decoded) {
             const body = req.body;
             const transferHistoryRepo = AppDataSource.getRepository(Transfer);
@@ -28,13 +26,13 @@ router.get('/', cors(), async (req, res) => {
                 id: body.rekPengirim
             });
             // kurangi saldo pengirim dan tambahkan saldo penerima
-            userPengirim.saldo -= body.nominal;
-            userPenerima.saldo += body.nominal;
+            userPengirim.saldo -= parseFloat(body.nominal);
+            userPenerima.saldo += parseFloat(body.nominal);
             // masukin history transfer
             const transferHistory = new Transfer();
             transferHistory.userIDPengirim = userPengirim.id;
             transferHistory.userIDPenerima = userPenerima.id;
-            transferHistory.nominal = body.nominal;
+            transferHistory.nominal = parseFloat(body.nominal);
             // save ke repo user dan transfer
             await userRepo.save([userPengirim, userPenerima]);
             await transferHistoryRepo.save(transferHistory);

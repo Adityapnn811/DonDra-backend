@@ -19,8 +19,9 @@ __decorate([
     __metadata("design:type", Number)
 ], Moneytoring.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        type: "numeric"
+    (0, typeorm_1.Column)("decimal", {
+        precision: 10,
+        scale: 2
     }),
     __metadata("design:type", Number)
 ], Moneytoring.prototype, "nominal", void 0);

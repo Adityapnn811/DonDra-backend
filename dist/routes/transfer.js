@@ -9,17 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isQueryFailedError = void 0;
 const User_1 = require("../typeorm/entity/User");
 const data_source_1 = require("../typeorm/data-source");
-const typeorm_1 = require("typeorm");
+const Transfer_1 = require("../typeorm/entity/Transfer");
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const isQueryFailedError = (err) => err instanceof typeorm_1.QueryFailedError;
-exports.isQueryFailedError = isQueryFailedError;
-router.get("/:id", cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const cors = require('cors');
+// Langsung transfer sekalian masukin history transfer
+// Apakah ini Decorator?
+router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers.authorization.split(" ")[1];
     if (!token) {
         res.status(400).json({ error: "No token provided" });
@@ -27,27 +26,28 @@ router.get("/:id", cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
     else {
         const decoded = jwt.verify(token, "dondraforbinomo");
         if (decoded) {
-            const { id } = req.params;
+            const body = req.body;
+            const transferHistoryRepo = data_source_1.AppDataSource.getRepository(Transfer_1.Transfer);
             const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-            const userToBeChecked = yield userRepo.findOne({
-                where: {
-                    id: id,
-                    isVerified: true
-                }
-            }).catch(err => {
-                if ((0, exports.isQueryFailedError)(err)) {
-                    res.status(400).json({ error: "User not found" });
-                }
-                else {
-                    res.status(400).json({ error: "Something went wrong" });
-                }
+            // cari user dengan id penerima dan pengirim
+            const userPenerima = yield userRepo.findOneBy({
+                id: body.rekPenerima
             });
-            if (userToBeChecked) {
-                res.status(200).send({ success: true, message: "User is Valid", userName: userToBeChecked.nama });
-            }
-            else {
-                res.status(400).json({ error: "User not found" });
-            }
+            const userPengirim = yield userRepo.findOneBy({
+                id: body.rekPengirim
+            });
+            // kurangi saldo pengirim dan tambahkan saldo penerima
+            userPengirim.saldo -= parseFloat(body.nominal);
+            userPenerima.saldo += parseFloat(body.nominal);
+            // masukin history transfer
+            const transferHistory = new Transfer_1.Transfer();
+            transferHistory.userIDPengirim = userPengirim.id;
+            transferHistory.userIDPenerima = userPenerima.id;
+            transferHistory.nominal = parseFloat(body.nominal);
+            // save ke repo user dan transfer
+            yield userRepo.save([userPengirim, userPenerima]);
+            yield transferHistoryRepo.save(transferHistory);
+            res.status(200).json({ message: "Transfer success" });
         }
         else {
             res.status(400).json({ error: "Invalid token" });
@@ -55,4 +55,4 @@ router.get("/:id", cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 }));
 module.exports = router;
-//# sourceMappingURL=checkUser.js.map
+//# sourceMappingURL=transfer.js.map
