@@ -19,8 +19,11 @@ router.get("/:id", cors(), async (req, res) => {
         if (decoded) {
             const {id} = req.params
             const userRepo = AppDataSource.getRepository(User);
-            const userToBeChecked = await userRepo.findOneBy({
-                id: id
+            const userToBeChecked = await userRepo.findOne({
+                where: {
+                    id: id,
+                    isVerified: true
+                }
             }).catch(err => {
                 if (isQueryFailedError(err)) {
                     res.status(400).json({error: "User not found"});
