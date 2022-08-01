@@ -66,7 +66,8 @@ router.get('/:id', cors(), async (req, res) => {
                         nominal: true,
                         isIncome: true,
                         transactionDate: true,
-                        isVerified: true
+                        isVerified: true,
+                        isRejected: true
                     }
                 }).catch(err => console.log(err))
                 // Jadikan satu
