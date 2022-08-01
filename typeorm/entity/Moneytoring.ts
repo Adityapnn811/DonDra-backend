@@ -21,7 +21,12 @@ export class Moneytoring {
         default: false
     })
     isVerified: boolean
-
+    
+    @Column({
+        default: false
+    })
+    isRejected: boolean
+    
     @CreateDateColumn()
     transactionDate: Date
 

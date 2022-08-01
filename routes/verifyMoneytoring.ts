@@ -14,23 +14,32 @@ router.put("/:idMoneytoring", cors(), async (req, res) => {
         try {
             const decoded = jwt.verify(token, "dondraforbinomo");
             if (decoded) {
+                const body = req.body;
                 const {idMoneytoring} = req.params
                 const moneytoringRepo = AppDataSource.getRepository(Moneytoring);
-                const userRepo = AppDataSource.getRepository(User);
                 const moneytoringToBeVerified = await moneytoringRepo.findOneBy({
                     id: idMoneytoring
                 });
-                const user = await userRepo.findOneBy({
-                id: moneytoringToBeVerified.user.id
-            })
-            if (moneytoringToBeVerified.isIncome) {
-                user.saldo += moneytoringToBeVerified.nominal;
-            } else {
-                user.saldo -= moneytoringToBeVerified.nominal;
-            }
-            moneytoringToBeVerified.isVerified = true;
-            await moneytoringRepo.save(moneytoringToBeVerified);
-            res.status(200).send({success: true, message: "Moneytoring has been verified"});
+                // cek apakah admin menolak atau menyetujui
+                if (body.isRejected === "true") {
+                    moneytoringToBeVerified.isRejected = true;
+                } else {
+                    // tambahkan atau kurangi saldo karena admin setuju
+                    const userRepo = AppDataSource.getRepository(User);
+                    const user = await userRepo.findOneBy({
+                        id: moneytoringToBeVerified.user.id
+                    })
+                    if (moneytoringToBeVerified.isIncome) {
+                        user.saldo += moneytoringToBeVerified.nominal;
+                    } else {
+                        user.saldo -= moneytoringToBeVerified.nominal;
+                    }
+                    await userRepo.save(user);
+                }
+                // update bahwa moneytoring sudah diperiksa admin
+                moneytoringToBeVerified.isVerified = true;
+                await moneytoringRepo.save(moneytoringToBeVerified);
+                res.status(200).send({success: true, message: "Moneytoring has been verified"});
             } else {
                 res.status(400).json({error: "Invalid token"});
             }
