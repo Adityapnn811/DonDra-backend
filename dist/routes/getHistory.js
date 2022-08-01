@@ -42,6 +42,7 @@ router.get('/:id', cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
                         id: true,
                         nominal: true,
                         transferDate: true,
+                    }, relations: {
                         userIDPengirim: {
                             id: true,
                             nama: true,
@@ -55,6 +56,7 @@ router.get('/:id', cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
                         id: true,
                         nominal: true,
                         transferDate: true,
+                    }, relations: {
                         userIDPenerima: {
                             id: true,
                             nama: true,

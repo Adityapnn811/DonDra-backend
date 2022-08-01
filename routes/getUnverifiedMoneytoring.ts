@@ -16,23 +16,18 @@ router.get('/', cors(), async (req, res) => {
             if (decoded) {
                 const moneytoringRepo = AppDataSource.getRepository(Moneytoring);
                 const moneytorings = await moneytoringRepo.find({
-                where: {
-                    isVerified: false
-                }, select: {
-                    id: true,
-                    nominal: true,
-                    isIncome: true,
-                    transactionDate: true,
-                }, relations: {
-                    user: {
+                    where: {
+                        isVerified: false
+                    }, select: {
                         id: true,
-                        nama: true,
-                        username: true,
-                        saldo: true
+                        nominal: true,
+                        isIncome: true,
+                        transactionDate: true,
+                    }, relations: {
+                        user: true
                     }
-                }
-            });
-            res.status(200).json(moneytorings);
+                });
+                res.status(200).json(moneytorings);
             } else {
                 res.status(400).json({error: "Invalid token"});
             }
