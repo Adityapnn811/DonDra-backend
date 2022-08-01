@@ -11,11 +11,12 @@ router.get('/', cors(), async (req, res) => {
     if (!token) {
         res.status(400).json({error: "No token provided"});
     } else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        if (decoded) {
-            const moneytoringRepo = AppDataSource.getRepository(Moneytoring);
-            const moneytorings = await moneytoringRepo.find({
-                where: {
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            if (decoded) {
+                const moneytoringRepo = AppDataSource.getRepository(Moneytoring);
+                const moneytorings = await moneytoringRepo.find({
+                    where: {
                     isVerified: false
                 }, select: {
                     id: true,
@@ -29,7 +30,10 @@ router.get('/', cors(), async (req, res) => {
                 }
             });
             res.status(200).json(moneytorings);
-        } else {
+            } else {
+                res.status(400).json({error: "Invalid token"});
+            }
+        }catch {
             res.status(400).json({error: "Invalid token"});
         }
     }

@@ -10,17 +10,22 @@ router.get("/:id", cors(), async (req, res) => {
     if (!token) {
         res.status(400).json({error: "No token provided"});
     } else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        if (decoded) {
-            const {id} = req.params
-            const userRepo = AppDataSource.getRepository(User);
-            const userToBeChecked = await userRepo.findOneBy({
-                id: id
-            })
-            if (userToBeChecked) {
-                res.status(200).json(userToBeChecked);
+        try {
+
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            if (decoded) {
+                const {id} = req.params
+                const userRepo = AppDataSource.getRepository(User);
+                const userToBeChecked = await userRepo.findOneBy({
+                    id: id
+                })
+                if (userToBeChecked) {
+                    res.status(200).json(userToBeChecked);
+                }
+            } else {
+                res.status(400).json({error: "Invalid token"});
             }
-        } else {
+        } catch {
             res.status(400).json({error: "Invalid token"});
         }
     }

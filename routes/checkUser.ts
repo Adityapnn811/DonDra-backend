@@ -15,31 +15,35 @@ router.get("/:id", cors(), async (req, res) => {
     if (!token) {
         res.status(400).json({error: "No token provided"});
     } else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        if (decoded) {
-            const {id} = req.params
-            const userRepo = AppDataSource.getRepository(User);
-            const userToBeChecked = await userRepo.findOne({
-                where: {
-                    id: id,
-                    isVerified: true
-                }
-            }).catch(err => {
-                if (isQueryFailedError(err)) {
-                    res.status(400).json({error: "User not found"});
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            if (decoded) {
+                const {id} = req.params
+                const userRepo = AppDataSource.getRepository(User);
+                const userToBeChecked = await userRepo.findOne({
+                    where: {
+                        id: id,
+                        isVerified: true
+                    }
+                }).catch(err => {
+                    if (isQueryFailedError(err)) {
+                        res.status(400).json({error: "User not found"});
+                    } else {
+                        res.status(400).json({error: "Something went wrong"});
+                    }
+                })
+                if (userToBeChecked) {
+                    res.status(200).send({success: true, message: "User is Valid", userName: userToBeChecked.nama});
                 } else {
-                    res.status(400).json({error: "Something went wrong"});
+                    res.status(400).json({error: "User not found"});
                 }
-            })
-            if (userToBeChecked) {
-                res.status(200).send({success: true, message: "User is Valid", userName: userToBeChecked.nama});
             } else {
-                res.status(400).json({error: "User not found"});
+                res.status(400).json({error: "Invalid token"});
             }
-        } else {
+        } catch {
             res.status(400).json({error: "Invalid token"});
         }
     }
 })
-
+    
 module.exports = router;

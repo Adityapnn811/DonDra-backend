@@ -13,31 +13,35 @@ router.post('/', cors(), async (req, res) => {
     if (!token) {
         res.status(400).json({error: "No token provided"});
     } else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        if (decoded) {
-            const body = req.body;
-            const transferHistoryRepo = AppDataSource.getRepository(Transfer);
-            const userRepo = AppDataSource.getRepository(User);
-            // cari user dengan id penerima dan pengirim
-            const userPenerima = await userRepo.findOneBy({
-                id: parseInt(body.rekPenerima)
-            });
-            const userPengirim = await userRepo.findOneBy({
-                id: parseInt(body.rekPengirim)
-            });
-            // kurangi saldo pengirim dan tambahkan saldo penerima
-            userPengirim.saldo -= parseFloat(body.nominal);
-            userPenerima.saldo += parseFloat(body.nominal);
-            // masukin history transfer
-            const transferHistory = new Transfer();
-            transferHistory.userIDPengirim = userPengirim.id;
-            transferHistory.userIDPenerima = userPenerima.id;
-            transferHistory.nominal = parseFloat(body.nominal);
-            // save ke repo user dan transfer
-            await userRepo.save([userPengirim, userPenerima]);
-            await transferHistoryRepo.save(transferHistory);
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            if (decoded) {
+                const body = req.body;
+                const transferHistoryRepo = AppDataSource.getRepository(Transfer);
+                const userRepo = AppDataSource.getRepository(User);
+                // cari user dengan id penerima dan pengirim
+                const userPenerima = await userRepo.findOneBy({
+                    id: parseInt(body.rekPenerima)
+                });
+                const userPengirim = await userRepo.findOneBy({
+                    id: parseInt(body.rekPengirim)
+                });
+                // kurangi saldo pengirim dan tambahkan saldo penerima
+                userPengirim.saldo -= parseFloat(body.nominal);
+                userPenerima.saldo += parseFloat(body.nominal);
+                // masukin history transfer
+                const transferHistory = new Transfer();
+                transferHistory.userIDPengirim = userPengirim.id;
+                transferHistory.userIDPenerima = userPenerima.id;
+                transferHistory.nominal = parseFloat(body.nominal);
+                // save ke repo user dan transfer
+                await userRepo.save([userPengirim, userPenerima]);
+                await transferHistoryRepo.save(transferHistory);
             res.status(200).json({message: "Transfer success", success: true});
-        } else {
+            } else {
+                res.status(400).json({error: "Invalid token"});
+            }
+        } catch {
             res.status(400).json({error: "Invalid token"});
         }
     }

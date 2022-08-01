@@ -11,15 +11,16 @@ router.put("/:idMoneytoring", cors(), async (req, res) => {
     if (!token) {
         res.status(400).json({error: "No token provided"});
     } else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        if (decoded) {
-            const {idMoneytoring} = req.params
-            const moneytoringRepo = AppDataSource.getRepository(Moneytoring);
-            const userRepo = AppDataSource.getRepository(User);
-            const moneytoringToBeVerified = await moneytoringRepo.findOneBy({
-                id: idMoneytoring
-            });
-            const user = await userRepo.findOneBy({
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            if (decoded) {
+                const {idMoneytoring} = req.params
+                const moneytoringRepo = AppDataSource.getRepository(Moneytoring);
+                const userRepo = AppDataSource.getRepository(User);
+                const moneytoringToBeVerified = await moneytoringRepo.findOneBy({
+                    id: idMoneytoring
+                });
+                const user = await userRepo.findOneBy({
                 id: moneytoringToBeVerified.user.id
             })
             if (moneytoringToBeVerified.isIncome) {
@@ -30,7 +31,10 @@ router.put("/:idMoneytoring", cors(), async (req, res) => {
             moneytoringToBeVerified.isVerified = true;
             await moneytoringRepo.save(moneytoringToBeVerified);
             res.status(200).send({success: true, message: "Moneytoring has been verified"});
-        } else {
+            } else {
+                res.status(400).json({error: "Invalid token"});
+            }
+        } catch {
             res.status(400).json({error: "Invalid token"});
         }
     }

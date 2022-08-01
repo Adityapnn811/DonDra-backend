@@ -23,52 +23,57 @@ router.get('/:id', cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.status(400).json({ error: "No token provided" });
     }
     else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        if (decoded) {
-            const { id } = req.params;
-            const transferHistoryRepo = data_source_1.AppDataSource.getRepository(Transfer_1.Transfer);
-            const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
-            const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-            // cari user dengan id 
-            const userToBeChecked = yield userRepo.findOneBy({
-                id: id
-            });
-            // Cari history transfer
-            const transferHistoryMasuk = yield transferHistoryRepo.find({
-                where: {
-                    userIDPenerima: id
-                }, select: {
-                    id: true,
-                    nominal: true,
-                    transferDate: true,
-                    userIDPengirim: true
-                }
-            });
-            const transferHistoryKeluar = yield transferHistoryRepo.find({
-                where: {
-                    userIDPengirim: id
-                }, select: {
-                    id: true,
-                    nominal: true,
-                    transferDate: true,
-                    userIDPenerima: true
-                }
-            });
-            // Cari history moneytoring
-            const moneytoringHistory = yield moneytoringRepo.find({
-                where: {
-                    user: userToBeChecked
-                }, select: {
-                    id: true,
-                    nominal: true,
-                    isIncome: true,
-                    transactionDate: true,
-                    isVerified: true
-                }
-            });
-            res.status(200).json({ transferMasuk: transferHistoryMasuk, transferKeluar: transferHistoryKeluar, moneytoringHistory: moneytoringHistory });
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            if (decoded) {
+                const { id } = req.params;
+                const transferHistoryRepo = data_source_1.AppDataSource.getRepository(Transfer_1.Transfer);
+                const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
+                const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
+                // cari user dengan id 
+                const userToBeChecked = yield userRepo.findOneBy({
+                    id: id
+                });
+                // Cari history transfer
+                const transferHistoryMasuk = yield transferHistoryRepo.find({
+                    where: {
+                        userIDPenerima: id
+                    }, select: {
+                        id: true,
+                        nominal: true,
+                        transferDate: true,
+                        userIDPengirim: true
+                    }
+                });
+                const transferHistoryKeluar = yield transferHistoryRepo.find({
+                    where: {
+                        userIDPengirim: id
+                    }, select: {
+                        id: true,
+                        nominal: true,
+                        transferDate: true,
+                        userIDPenerima: true
+                    }
+                });
+                // Cari history moneytoring
+                const moneytoringHistory = yield moneytoringRepo.find({
+                    where: {
+                        user: userToBeChecked
+                    }, select: {
+                        id: true,
+                        nominal: true,
+                        isIncome: true,
+                        transactionDate: true,
+                        isVerified: true
+                    }
+                });
+                res.status(200).json({ transferMasuk: transferHistoryMasuk, transferKeluar: transferHistoryKeluar, moneytoringHistory: moneytoringHistory });
+            }
+            else {
+                res.status(400).json({ error: "Invalid token" });
+            }
         }
-        else {
+        catch (_a) {
             res.status(400).json({ error: "Invalid token" });
         }
     }

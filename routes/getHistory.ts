@@ -13,55 +13,59 @@ router.get('/:id', cors(), async (req, res) => {
     if (!token) {
         res.status(400).json({error: "No token provided"});
     } else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        if (decoded) {
-            const {id} = req.params
-            const transferHistoryRepo = AppDataSource.getRepository(Transfer);
-            const moneytoringRepo = AppDataSource.getRepository(Moneytoring);
-            const userRepo = AppDataSource.getRepository(User);
-            // cari user dengan id 
-            const userToBeChecked = await userRepo.findOneBy({
-                id: id
-            });
-
-
-            // Cari history transfer
-            const transferHistoryMasuk = await transferHistoryRepo.find({
-                where: {
-                    userIDPenerima: id
-                }, select: {
-                    id: true,
-                    nominal: true,
-                    transferDate: true,
-                    userIDPengirim: true
-                }
-            })
-            const transferHistoryKeluar = await transferHistoryRepo.find({
-                where: {
-                    userIDPengirim: id
-                }, select: {
-                    id: true,
-                    nominal: true,
-                    transferDate: true,
-                    userIDPenerima: true
-                }
-            })
-
-            // Cari history moneytoring
-            const moneytoringHistory = await moneytoringRepo.find({
-                where: {
-                    user: userToBeChecked
-                }, select: {
-                    id: true,
-                    nominal: true,
-                    isIncome: true,
-                    transactionDate: true,
-                    isVerified: true
-                }
-            })
-
-            res.status(200).json({transferMasuk: transferHistoryMasuk, transferKeluar: transferHistoryKeluar, moneytoringHistory: moneytoringHistory});
-        } else {
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            if (decoded) {
+                const {id} = req.params
+                const transferHistoryRepo = AppDataSource.getRepository(Transfer);
+                const moneytoringRepo = AppDataSource.getRepository(Moneytoring);
+                const userRepo = AppDataSource.getRepository(User);
+                // cari user dengan id 
+                const userToBeChecked = await userRepo.findOneBy({
+                    id: id
+                });
+    
+    
+                // Cari history transfer
+                const transferHistoryMasuk = await transferHistoryRepo.find({
+                    where: {
+                        userIDPenerima: id
+                    }, select: {
+                        id: true,
+                        nominal: true,
+                        transferDate: true,
+                        userIDPengirim: true
+                    }
+                })
+                const transferHistoryKeluar = await transferHistoryRepo.find({
+                    where: {
+                        userIDPengirim: id
+                    }, select: {
+                        id: true,
+                        nominal: true,
+                        transferDate: true,
+                        userIDPenerima: true
+                    }
+                })
+    
+                // Cari history moneytoring
+                const moneytoringHistory = await moneytoringRepo.find({
+                    where: {
+                        user: userToBeChecked
+                    }, select: {
+                        id: true,
+                        nominal: true,
+                        isIncome: true,
+                        transactionDate: true,
+                        isVerified: true
+                    }
+                })
+    
+                res.status(200).json({transferMasuk: transferHistoryMasuk, transferKeluar: transferHistoryKeluar, moneytoringHistory: moneytoringHistory});
+            } else {
+                res.status(400).json({error: "Invalid token"});
+            }
+        } catch {
             res.status(400).json({error: "Invalid token"});
         }
     }

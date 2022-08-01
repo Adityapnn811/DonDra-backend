@@ -11,24 +11,28 @@ router.post('/', cors(), async (req, res) => {
     if (!token) {
         res.status(400).json({error: "No token provided"});
     } else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        if (decoded) {
-            const body = req.body;
-            const userRepo = AppDataSource.getRepository(User);
-            // cari user dengan id penerima dan pengirim
-            const user = await userRepo.findOneBy({
-                id: body.id
-            });
-            // Buat moneytoring baru
-            const moneytoring = new Moneytoring();
-            moneytoring.user = user;
-            moneytoring.nominal = parseFloat(body.nominal);
-            moneytoring.isIncome = body.isIncome;
-            moneytoring.isVerified = false
-            // save
-            await AppDataSource.manager.save(moneytoring);
-            res.status(200).json({message: "Request success"});
-        } else {
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            if (decoded) {
+                const body = req.body;
+                const userRepo = AppDataSource.getRepository(User);
+                // cari user dengan id penerima dan pengirim
+                const user = await userRepo.findOneBy({
+                    id: body.id
+                });
+                // Buat moneytoring baru
+                const moneytoring = new Moneytoring();
+                moneytoring.user = user;
+                moneytoring.nominal = parseFloat(body.nominal);
+                moneytoring.isIncome = body.isIncome;
+                moneytoring.isVerified = false
+                // save
+                await AppDataSource.manager.save(moneytoring);
+                res.status(200).json({message: "Request success"});
+            } else {
+                res.status(400).json({error: "Invalid token"});
+            }
+        } catch {
             res.status(400).json({error: "Invalid token"});
         }
     }
