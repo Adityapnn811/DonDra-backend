@@ -28,7 +28,7 @@ router.post('/', cors(), async (req, res) => {
                 moneytoring.isVerified = false
                 // save
                 await AppDataSource.manager.save(moneytoring);
-                res.status(200).json({message: "Request success"});
+                res.status(200).json({message: "Request success", success: true});
             } else {
                 res.status(400).json({error: "Invalid token"});
             }
