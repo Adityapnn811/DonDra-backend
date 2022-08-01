@@ -9,29 +9,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const User_1 = require("../typeorm/entity/User");
+const Moneytoring_1 = require("../typeorm/entity/Moneytoring");
 const data_source_1 = require("../typeorm/data-source");
+const User_1 = require("../typeorm/entity/User");
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-router.put("/:id", cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put("/:idMoneytoring", cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers.authorization.split(" ")[1];
     if (!token) {
         res.status(400).json({ error: "No token provided" });
     }
     else {
         const decoded = jwt.verify(token, "dondraforbinomo");
-        console.log(decoded.username);
         if (decoded) {
-            const { id } = req.params;
+            const { idMoneytoring } = req.params;
+            const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
             const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-            const userToBeVerified = yield userRepo.findOneBy({
-                id: id
+            const moneytoringToBeVerified = yield moneytoringRepo.findOneBy({
+                id: idMoneytoring
             });
-            userToBeVerified.isVerified = true;
-            yield userRepo.save(userToBeVerified);
-            res.status(200).send({ success: true, message: "User has been verified" });
+            const user = yield userRepo.findOneBy({
+                id: moneytoringToBeVerified.user.id
+            });
+            if (moneytoringToBeVerified.isIncome) {
+                user.saldo += moneytoringToBeVerified.nominal;
+            }
+            else {
+                user.saldo -= moneytoringToBeVerified.nominal;
+            }
+            moneytoringToBeVerified.isVerified = true;
+            yield moneytoringRepo.save(moneytoringToBeVerified);
+            res.status(200).send({ success: true, message: "Moneytoring has been verified" });
         }
         else {
             res.status(400).json({ error: "Invalid token" });
@@ -39,4 +49,4 @@ router.put("/:id", cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 }));
 module.exports = router;
-//# sourceMappingURL=verifyUser.js.map
+//# sourceMappingURL=verifyMoneytoring.js.map

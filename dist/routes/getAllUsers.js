@@ -45,5 +45,26 @@ router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function
         }
     }
 }));
+// return user berdasarkan ID
+router.get('/:id', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers.authorization.split(" ")[1];
+    if (!token) {
+        res.status(400).json({ error: "No token provided" });
+    }
+    else {
+        const decoded = jwt.verify(token, "dondraforbinomo");
+        console.log(decoded.username);
+        if (decoded) {
+            const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
+            const user = yield userRepo.findOneBy({
+                id: req.params.id
+            });
+            res.status(200).json(user);
+        }
+        else {
+            res.status(400).json({ error: "Invalid token" });
+        }
+    }
+}));
 module.exports = router;
 //# sourceMappingURL=getAllUsers.js.map

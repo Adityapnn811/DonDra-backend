@@ -20,10 +20,10 @@ router.post('/', cors(), async (req, res) => {
             const userRepo = AppDataSource.getRepository(User);
             // cari user dengan id penerima dan pengirim
             const userPenerima = await userRepo.findOneBy({
-                id: body.rekPenerima
+                id: parseInt(body.rekPenerima)
             });
             const userPengirim = await userRepo.findOneBy({
-                id: body.rekPengirim
+                id: parseInt(body.rekPengirim)
             });
             // kurangi saldo pengirim dan tambahkan saldo penerima
             userPengirim.saldo -= parseFloat(body.nominal);

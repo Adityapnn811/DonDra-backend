@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Transfer = void 0;
 const typeorm_1 = require("typeorm");
 const User_1 = require("./User");
+const numeric_transformer_1 = require("../numeric.transformer");
 let Transfer = class Transfer {
 };
 __decorate([
@@ -29,7 +30,8 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)("decimal", {
         precision: 10,
-        scale: 2
+        scale: 2,
+        transformer: new numeric_transformer_1.ColumnNumericTransformer()
     }),
     __metadata("design:type", Number)
 ], Transfer.prototype, "nominal", void 0);

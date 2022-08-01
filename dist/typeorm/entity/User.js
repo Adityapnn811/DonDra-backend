@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = exports.UserRole = void 0;
 const typeorm_1 = require("typeorm");
+const numeric_transformer_1 = require("../numeric.transformer");
 var UserRole;
 (function (UserRole) {
     UserRole["ADMIN"] = "admin";
@@ -58,7 +59,8 @@ __decorate([
     (0, typeorm_1.Column)("decimal", {
         default: 0.0,
         precision: 10,
-        scale: 2
+        scale: 2,
+        transformer: new numeric_transformer_1.ColumnNumericTransformer()
     }),
     __metadata("design:type", Number)
 ], User.prototype, "saldo", void 0);

@@ -9,29 +9,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const User_1 = require("../typeorm/entity/User");
 const data_source_1 = require("../typeorm/data-source");
+const Moneytoring_1 = require("../typeorm/entity/Moneytoring");
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
 const jwt = require('jsonwebtoken');
-router.put("/:id", cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const cors = require('cors');
+router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers.authorization.split(" ")[1];
     if (!token) {
         res.status(400).json({ error: "No token provided" });
     }
     else {
         const decoded = jwt.verify(token, "dondraforbinomo");
-        console.log(decoded.username);
         if (decoded) {
-            const { id } = req.params;
-            const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-            const userToBeVerified = yield userRepo.findOneBy({
-                id: id
+            const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
+            const moneytorings = yield moneytoringRepo.find({
+                where: {
+                    isVerified: false
+                }, select: {
+                    id: true,
+                    nominal: true,
+                    isIncome: true,
+                    transactionDate: true,
+                    user: {
+                        id: true,
+                        nama: true,
+                    }
+                }
             });
-            userToBeVerified.isVerified = true;
-            yield userRepo.save(userToBeVerified);
-            res.status(200).send({ success: true, message: "User has been verified" });
+            res.status(200).json(moneytorings);
         }
         else {
             res.status(400).json({ error: "Invalid token" });
@@ -39,4 +46,4 @@ router.put("/:id", cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 }));
 module.exports = router;
-//# sourceMappingURL=verifyUser.js.map
+//# sourceMappingURL=getUnverifiedMoneytoring.js.map

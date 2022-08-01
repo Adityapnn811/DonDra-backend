@@ -11,13 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const User_1 = require("../typeorm/entity/User");
 const data_source_1 = require("../typeorm/data-source");
-const Transfer_1 = require("../typeorm/entity/Transfer");
+const Moneytoring_1 = require("../typeorm/entity/Moneytoring");
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
-// Langsung transfer sekalian masukin history transfer
-// Apakah ini Decorator?
 router.post('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers.authorization.split(" ")[1];
     if (!token) {
@@ -27,27 +25,20 @@ router.post('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, functio
         const decoded = jwt.verify(token, "dondraforbinomo");
         if (decoded) {
             const body = req.body;
-            const transferHistoryRepo = data_source_1.AppDataSource.getRepository(Transfer_1.Transfer);
             const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
             // cari user dengan id penerima dan pengirim
-            const userPenerima = yield userRepo.findOneBy({
-                id: parseInt(body.rekPenerima)
+            const user = yield userRepo.findOneBy({
+                id: body.id
             });
-            const userPengirim = yield userRepo.findOneBy({
-                id: parseInt(body.rekPengirim)
-            });
-            // kurangi saldo pengirim dan tambahkan saldo penerima
-            userPengirim.saldo -= parseFloat(body.nominal);
-            userPenerima.saldo += parseFloat(body.nominal);
-            // masukin history transfer
-            const transferHistory = new Transfer_1.Transfer();
-            transferHistory.userIDPengirim = userPengirim.id;
-            transferHistory.userIDPenerima = userPenerima.id;
-            transferHistory.nominal = parseFloat(body.nominal);
-            // save ke repo user dan transfer
-            yield userRepo.save([userPengirim, userPenerima]);
-            yield transferHistoryRepo.save(transferHistory);
-            res.status(200).json({ message: "Transfer success", success: true });
+            // Buat moneytoring baru
+            const moneytoring = new Moneytoring_1.Moneytoring();
+            moneytoring.user = user;
+            moneytoring.nominal = parseFloat(body.nominal);
+            moneytoring.isIncome = body.isIncome;
+            moneytoring.isVerified = false;
+            // save
+            yield data_source_1.AppDataSource.manager.save(moneytoring);
+            res.status(200).json({ message: "Request success" });
         }
         else {
             res.status(400).json({ error: "Invalid token" });
@@ -55,4 +46,4 @@ router.post('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 }));
 module.exports = router;
-//# sourceMappingURL=transfer.js.map
+//# sourceMappingURL=requestMoneytoring.js.map

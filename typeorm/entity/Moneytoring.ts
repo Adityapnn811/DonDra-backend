@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, ManyToOne } from "typeorm"
 import { User } from "./User"
+import { ColumnNumericTransformer } from "../numeric.transformer"
 
 @Entity()
 export class Moneytoring {
@@ -8,7 +9,8 @@ export class Moneytoring {
 
     @Column("decimal", {
         precision: 10,
-        scale: 2
+        scale: 2,
+        transformer: new ColumnNumericTransformer()
     })
     nominal: number
     

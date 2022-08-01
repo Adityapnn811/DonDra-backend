@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, ManyToOne, OneToMany } from "typeorm"
+import { ColumnNumericTransformer } from "../numeric.transformer"
 
 export enum UserRole {
     ADMIN = "admin",
@@ -40,7 +41,8 @@ export class User {
     @Column("decimal", {
         default: 0.0,
         precision: 10,
-        scale: 2
+        scale: 2,
+        transformer: new ColumnNumericTransformer()
     })
     saldo: number
 
