@@ -36,7 +36,7 @@ router.post('/', cors(), async (req, res) => {
             // save ke repo user dan transfer
             await userRepo.save([userPengirim, userPenerima]);
             await transferHistoryRepo.save(transferHistory);
-            res.status(200).json({message: "Transfer success"});
+            res.status(200).json({message: "Transfer success", success: true});
         } else {
             res.status(400).json({error: "Invalid token"});
         }
