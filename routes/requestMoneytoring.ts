@@ -18,7 +18,7 @@ router.post('/', cors(), async (req, res) => {
                 const userRepo = AppDataSource.getRepository(User);
                 // cari user dengan id penerima dan pengirim
                 const user = await userRepo.findOneBy({
-                    id: body.id
+                    id: parseInt(body.id)
                 });
                 // Buat moneytoring baru
                 const moneytoring = new Moneytoring();
