@@ -24,7 +24,12 @@ router.get('/', cors(), async (req, res) => {
                     isIncome: true,
                     transactionDate: true,
                 }, relations: {
-                    user: true
+                    user: {
+                        id: true,
+                        nama: true,
+                        username: true,
+                        saldo: true
+                    }
                 }
             });
             res.status(200).json(moneytorings);

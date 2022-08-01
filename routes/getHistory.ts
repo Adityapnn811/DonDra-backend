@@ -34,6 +34,7 @@ router.get('/:id', cors(), async (req, res) => {
                         id: true,
                         nominal: true,
                         transferDate: true,
+                    }, relations: {
                         userIDPengirim: {
                             id: true,
                             nama: true,
@@ -47,6 +48,7 @@ router.get('/:id', cors(), async (req, res) => {
                         id: true,
                         nominal: true,
                         transferDate: true,
+                    }, relations: {
                         userIDPenerima: {
                             id: true,
                             nama: true,
