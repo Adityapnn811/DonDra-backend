@@ -38,6 +38,12 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Moneytoring.prototype, "isVerified", void 0);
 __decorate([
+    (0, typeorm_1.Column)({
+        default: false
+    }),
+    __metadata("design:type", Boolean)
+], Moneytoring.prototype, "isRejected", void 0);
+__decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], Moneytoring.prototype, "transactionDate", void 0);

@@ -25,21 +25,31 @@ router.put("/:idMoneytoring", cors(), (req, res) => __awaiter(void 0, void 0, vo
         try {
             const decoded = jwt.verify(token, "dondraforbinomo");
             if (decoded) {
+                const body = req.body;
                 const { idMoneytoring } = req.params;
                 const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
-                const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
                 const moneytoringToBeVerified = yield moneytoringRepo.findOneBy({
                     id: idMoneytoring
                 });
-                const user = yield userRepo.findOneBy({
-                    id: moneytoringToBeVerified.user.id
-                });
-                if (moneytoringToBeVerified.isIncome) {
-                    user.saldo += moneytoringToBeVerified.nominal;
+                // cek apakah admin menolak atau menyetujui
+                if (body.isRejected === "true") {
+                    moneytoringToBeVerified.isRejected = true;
                 }
                 else {
-                    user.saldo -= moneytoringToBeVerified.nominal;
+                    // tambahkan atau kurangi saldo karena admin setuju
+                    const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
+                    const user = yield userRepo.findOneBy({
+                        id: moneytoringToBeVerified.user.id
+                    });
+                    if (moneytoringToBeVerified.isIncome) {
+                        user.saldo += moneytoringToBeVerified.nominal;
+                    }
+                    else {
+                        user.saldo -= moneytoringToBeVerified.nominal;
+                    }
+                    yield userRepo.save(user);
                 }
+                // update bahwa moneytoring sudah diperiksa admin
                 moneytoringToBeVerified.isVerified = true;
                 yield moneytoringRepo.save(moneytoringToBeVerified);
                 res.status(200).send({ success: true, message: "Moneytoring has been verified" });

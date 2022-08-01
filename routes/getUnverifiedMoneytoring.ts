@@ -16,17 +16,15 @@ router.get('/', cors(), async (req, res) => {
             if (decoded) {
                 const moneytoringRepo = AppDataSource.getRepository(Moneytoring);
                 const moneytorings = await moneytoringRepo.find({
-                    where: {
+                where: {
                     isVerified: false
                 }, select: {
                     id: true,
                     nominal: true,
                     isIncome: true,
                     transactionDate: true,
-                    user: {
-                        id: true,
-                        nama: true,
-                    }
+                }, relations: {
+                    user: true
                 }
             });
             res.status(200).json(moneytorings);

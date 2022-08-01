@@ -23,65 +23,65 @@ router.get('/:id', cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.status(400).json({ error: "No token provided" });
     }
     else {
-        // try {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        if (decoded) {
-            const { id } = req.params;
-            const transferHistoryRepo = data_source_1.AppDataSource.getRepository(Transfer_1.Transfer);
-            const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
-            const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-            // cari user dengan id
-            console.log(id);
-            const userToBeChecked = yield userRepo.findOneBy({
-                id: id
-            });
-            // Cari history transfer
-            const transferHistoryMasuk = yield transferHistoryRepo.find({
-                where: {
-                    userIDPenerima: userToBeChecked
-                }, select: {
-                    id: true,
-                    nominal: true,
-                    transferDate: true,
-                    userIDPengirim: {
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            if (decoded) {
+                const { id } = req.params;
+                const transferHistoryRepo = data_source_1.AppDataSource.getRepository(Transfer_1.Transfer);
+                const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
+                const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
+                // cari user dengan id
+                const userToBeChecked = yield userRepo.findOneBy({
+                    id: id
+                });
+                // Cari history transfer
+                const transferHistoryMasuk = yield transferHistoryRepo.find({
+                    where: {
+                        userIDPenerima: userToBeChecked
+                    }, select: {
                         id: true,
-                        nama: true,
+                        nominal: true,
+                        transferDate: true,
+                        userIDPengirim: {
+                            id: true,
+                            nama: true,
+                        }
                     }
-                }
-            }).catch(err => console.log(err));
-            const transferHistoryKeluar = yield transferHistoryRepo.find({
-                where: {
-                    userIDPengirim: userToBeChecked
-                }, select: {
-                    id: true,
-                    nominal: true,
-                    transferDate: true,
-                    userIDPenerima: {
+                }).catch(err => console.log(err));
+                const transferHistoryKeluar = yield transferHistoryRepo.find({
+                    where: {
+                        userIDPengirim: userToBeChecked
+                    }, select: {
                         id: true,
-                        nama: true,
+                        nominal: true,
+                        transferDate: true,
+                        userIDPenerima: {
+                            id: true,
+                            nama: true,
+                        }
                     }
-                }
-            }).catch(err => console.log(err));
-            // Cari history moneytoring
-            const moneytoringHistory = yield moneytoringRepo.find({
-                where: {
-                    user: userToBeChecked
-                }, select: {
-                    id: true,
-                    nominal: true,
-                    isIncome: true,
-                    transactionDate: true,
-                    isVerified: true
-                }
-            }).catch(err => console.log(err));
-            res.status(200).json({ transferMasuk: transferHistoryMasuk, transferKeluar: transferHistoryKeluar, moneytoringHistory: moneytoringHistory });
+                }).catch(err => console.log(err));
+                // Cari history moneytoring
+                const moneytoringHistory = yield moneytoringRepo.find({
+                    where: {
+                        user: userToBeChecked
+                    }, select: {
+                        id: true,
+                        nominal: true,
+                        isIncome: true,
+                        transactionDate: true,
+                        isVerified: true
+                    }
+                }).catch(err => console.log(err));
+                res.status(200).json({ transferMasuk: transferHistoryMasuk, transferKeluar: transferHistoryKeluar, moneytoringHistory: moneytoringHistory });
+            }
+            else {
+                res.status(400).json({ error: "Invalid token" });
+            }
         }
-        else {
+        catch (_a) {
             res.status(400).json({ error: "Invalid token" });
         }
-        // } catch {
-        //     res.status(400).json({error: "Invalid token"});
-        // }
     }
 }));
 module.exports = router;

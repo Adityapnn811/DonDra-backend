@@ -29,7 +29,7 @@ router.post('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, functio
                 const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
                 // cari user dengan id penerima dan pengirim
                 const user = yield userRepo.findOneBy({
-                    id: body.id
+                    id: parseInt(body.id)
                 });
                 // Buat moneytoring baru
                 const moneytoring = new Moneytoring_1.Moneytoring();
@@ -39,7 +39,7 @@ router.post('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, functio
                 moneytoring.isVerified = false;
                 // save
                 yield data_source_1.AppDataSource.manager.save(moneytoring);
-                res.status(200).json({ message: "Request success" });
+                res.status(200).json({ message: "Request success", success: true });
             }
             else {
                 res.status(400).json({ error: "Invalid token" });
