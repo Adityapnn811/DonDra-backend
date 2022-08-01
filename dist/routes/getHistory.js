@@ -43,10 +43,7 @@ router.get('/:id', cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
                         nominal: true,
                         transferDate: true,
                     }, relations: {
-                        userIDPengirim: {
-                            id: true,
-                            nama: true,
-                        }
+                        userIDPengirim: true
                     }
                 }).catch(err => console.log(err));
                 const transferHistoryKeluar = yield transferHistoryRepo.find({
@@ -57,10 +54,7 @@ router.get('/:id', cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
                         nominal: true,
                         transferDate: true,
                     }, relations: {
-                        userIDPenerima: {
-                            id: true,
-                            nama: true,
-                        }
+                        userIDPenerima: true
                     }
                 }).catch(err => console.log(err));
                 // Cari history moneytoring

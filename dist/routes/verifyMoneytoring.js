@@ -22,45 +22,49 @@ router.put("/:idMoneytoring", cors(), (req, res) => __awaiter(void 0, void 0, vo
         res.status(400).json({ error: "No token provided" });
     }
     else {
-        try {
-            const decoded = jwt.verify(token, "dondraforbinomo");
-            if (decoded) {
-                const body = req.body;
-                const { idMoneytoring } = req.params;
-                const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
-                const moneytoringToBeVerified = yield moneytoringRepo.findOneBy({
+        // try {
+        const decoded = jwt.verify(token, "dondraforbinomo");
+        if (decoded) {
+            const body = req.body;
+            const { idMoneytoring } = req.params;
+            const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
+            const moneytoringToBeVerified = yield moneytoringRepo.findOne({
+                where: {
                     id: idMoneytoring
-                });
-                // cek apakah admin menolak atau menyetujui
-                if (body.isRejected === "true") {
-                    moneytoringToBeVerified.isRejected = true;
+                }, relations: {
+                    user: true
                 }
-                else {
-                    // tambahkan atau kurangi saldo karena admin setuju
-                    const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-                    const user = yield userRepo.findOneBy({
-                        id: moneytoringToBeVerified.user.id
-                    });
-                    if (moneytoringToBeVerified.isIncome) {
-                        user.saldo += moneytoringToBeVerified.nominal;
-                    }
-                    else {
-                        user.saldo -= moneytoringToBeVerified.nominal;
-                    }
-                    yield userRepo.save(user);
-                }
-                // update bahwa moneytoring sudah diperiksa admin
-                moneytoringToBeVerified.isVerified = true;
-                yield moneytoringRepo.save(moneytoringToBeVerified);
-                res.status(200).send({ success: true, message: "Moneytoring has been verified" });
+            });
+            // cek apakah admin menolak atau menyetujui
+            console.log(body.isRejected);
+            if (body.isRejected) {
+                moneytoringToBeVerified.isRejected = true;
             }
             else {
-                res.status(400).json({ error: "Invalid token" });
+                // tambahkan atau kurangi saldo karena admin setuju
+                const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
+                const user = yield userRepo.findOneBy({
+                    id: moneytoringToBeVerified.user.id
+                });
+                if (moneytoringToBeVerified.isIncome) {
+                    user.saldo += moneytoringToBeVerified.nominal;
+                }
+                else {
+                    user.saldo -= moneytoringToBeVerified.nominal;
+                }
+                yield userRepo.save(user);
             }
+            // update bahwa moneytoring sudah diperiksa admin
+            moneytoringToBeVerified.isVerified = true;
+            yield moneytoringRepo.save(moneytoringToBeVerified);
+            res.status(200).send({ success: true, message: "Moneytoring has been verified" });
         }
-        catch (_a) {
+        else {
             res.status(400).json({ error: "Invalid token" });
         }
+        //     } catch {
+        //         res.status(400).json({error: "Invalid token"});
+        //     }
     }
 }));
 module.exports = router;

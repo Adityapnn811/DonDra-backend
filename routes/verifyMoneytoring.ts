@@ -17,11 +17,16 @@ router.put("/:idMoneytoring", cors(), async (req, res) => {
                 const body = req.body;
                 const {idMoneytoring} = req.params
                 const moneytoringRepo = AppDataSource.getRepository(Moneytoring);
-                const moneytoringToBeVerified = await moneytoringRepo.findOneBy({
-                    id: idMoneytoring
+                const moneytoringToBeVerified = await moneytoringRepo.findOne({
+                    where: {
+                        id: idMoneytoring
+                    }, relations: {
+                        user: true
+                    }
                 });
                 // cek apakah admin menolak atau menyetujui
-                if (body.isRejected === "true") {
+                console.log(body.isRejected)
+                if (body.isRejected) {
                     moneytoringToBeVerified.isRejected = true;
                 } else {
                     // tambahkan atau kurangi saldo karena admin setuju
