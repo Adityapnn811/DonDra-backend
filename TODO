@@ -7,7 +7,7 @@ Caching (https://typeorm.io/caching)
 Buat endpoint ke semua fungsionalitas
 - get all user
 - approve moneytoring
-- transfer
+- transfer (udah, kurang testing tf koma koma)
 - login (kurang jwt dan nyambungin ke frontend, kurang cek apakah udah verified atau belum)
 - register (udah, udah hash, udah cek username)
 - get all history
@@ -24,5 +24,5 @@ DOCKERIZEEE!!!
 
 Design pattern:
 - Singleton (jwt)
-- Observer database
+- Observer database, sama app.use, jadi kita punya banyak router trus app jadi observer dan dia use router yang diimpor
 - Factory seeding
