@@ -14,7 +14,6 @@ const loginRouters = require('./routes/login');
 const getUnverifiedUsersRouters = require('./routes/getUnverifiedUsers');
 const verifyUserRouters = require('./routes/verifyUser');
 const getAllUsersRouters = require('./routes/getAllUsers');
-const exchangeRateRouters = require('./routes/exchangeRate');
 const checkUserRouters = require('./routes/checkUser');
 const getSaldoRouters = require('./routes/getSaldo');
 const transferRouters = require('./routes/transfer');
@@ -75,7 +74,6 @@ AppDataSource.initialize().then(async () => {
     app.use('/getUnverifiedUsers', getUnverifiedUsersRouters);
     app.use('/verifyUser', verifyUserRouters);
     app.use('/getAllUsers', getAllUsersRouters);
-    app.use('/exchangeRate', exchangeRateRouters);
     app.use('/checkUser', checkUserRouters);
     app.use('/getSaldo', getSaldoRouters);
     app.use('/transfer', transferRouters);

@@ -17,6 +17,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+// pake query, jadi nanti /:id?page=1
 router.get('/:id', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers.authorization.split(" ")[1];
     if (!token) {
@@ -69,6 +70,7 @@ router.get('/:id', cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
                         isVerified: true
                     }
                 }).catch(err => console.log(err));
+                console.log(moneytoringHistory);
                 res.status(200).json({ transferMasuk: transferHistoryMasuk, transferKeluar: transferHistoryKeluar, moneytoringHistory: moneytoringHistory });
             }
             else {
@@ -76,7 +78,7 @@ router.get('/:id', cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
             }
         }
         catch (_a) {
-            res.status(400).json({ error: "Invalid token" });
+            res.status(400).json({ error: "Something went wrong" });
         }
     }
 }));

@@ -47,7 +47,7 @@ router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function
             }
         }
         catch (_a) {
-            res.status(400).json({ error: "Invalid token" });
+            res.status(400).json({ error: "Something went wrong" });
         }
     }
 }));
