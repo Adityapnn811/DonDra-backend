@@ -34,4 +34,24 @@ router.get('/', cors(), async (req, res) => {
     }
 })
 
+// return user berdasarkan ID
+router.get('/:id', cors(), async (req, res) => {
+    const token = req.headers.authorization.split(" ")[1];
+    if (!token) {
+        res.status(400).json({error: "No token provided"});
+    } else {
+        const decoded = jwt.verify(token, "dondraforbinomo");
+        console.log(decoded.username)
+        if (decoded) {
+            const userRepo = AppDataSource.getRepository(User);
+            const user = await userRepo.findOneBy({
+                id: req.params.id
+            })
+            res.status(200).json(user);
+        } else {
+            res.status(400).json({error: "Invalid token"});
+        }
+    }
+})
+
 module.exports = router;
