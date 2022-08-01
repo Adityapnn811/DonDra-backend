@@ -22,25 +22,30 @@ router.post('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(400).json({ error: "No token provided" });
     }
     else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        if (decoded) {
-            const body = req.body;
-            const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-            // cari user dengan id penerima dan pengirim
-            const user = yield userRepo.findOneBy({
-                id: body.id
-            });
-            // Buat moneytoring baru
-            const moneytoring = new Moneytoring_1.Moneytoring();
-            moneytoring.user = user;
-            moneytoring.nominal = parseFloat(body.nominal);
-            moneytoring.isIncome = body.isIncome;
-            moneytoring.isVerified = false;
-            // save
-            yield data_source_1.AppDataSource.manager.save(moneytoring);
-            res.status(200).json({ message: "Request success" });
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            if (decoded) {
+                const body = req.body;
+                const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
+                // cari user dengan id penerima dan pengirim
+                const user = yield userRepo.findOneBy({
+                    id: body.id
+                });
+                // Buat moneytoring baru
+                const moneytoring = new Moneytoring_1.Moneytoring();
+                moneytoring.user = user;
+                moneytoring.nominal = parseFloat(body.nominal);
+                moneytoring.isIncome = body.isIncome;
+                moneytoring.isVerified = false;
+                // save
+                yield data_source_1.AppDataSource.manager.save(moneytoring);
+                res.status(200).json({ message: "Request success" });
+            }
+            else {
+                res.status(400).json({ error: "Invalid token" });
+            }
         }
-        else {
+        catch (_a) {
             res.status(400).json({ error: "Invalid token" });
         }
     }

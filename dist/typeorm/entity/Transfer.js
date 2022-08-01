@@ -21,11 +21,11 @@ __decorate([
 ], Transfer.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => User_1.User),
-    __metadata("design:type", Number)
+    __metadata("design:type", User_1.User)
 ], Transfer.prototype, "userIDPengirim", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => User_1.User),
-    __metadata("design:type", Number)
+    __metadata("design:type", User_1.User)
 ], Transfer.prototype, "userIDPenerima", void 0);
 __decorate([
     (0, typeorm_1.Column)("decimal", {

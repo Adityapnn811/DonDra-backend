@@ -21,19 +21,24 @@ router.put("/:id", cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.status(400).json({ error: "No token provided" });
     }
     else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        console.log(decoded.username);
-        if (decoded) {
-            const { id } = req.params;
-            const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-            const userToBeVerified = yield userRepo.findOneBy({
-                id: id
-            });
-            userToBeVerified.isVerified = true;
-            yield userRepo.save(userToBeVerified);
-            res.status(200).send({ success: true, message: "User has been verified" });
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            console.log(decoded.username);
+            if (decoded) {
+                const { id } = req.params;
+                const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
+                const userToBeVerified = yield userRepo.findOneBy({
+                    id: id
+                });
+                userToBeVerified.isVerified = true;
+                yield userRepo.save(userToBeVerified);
+                res.status(200).send({ success: true, message: "User has been verified" });
+            }
+            else {
+                res.status(400).json({ error: "Invalid token" });
+            }
         }
-        else {
+        catch (_a) {
             res.status(400).json({ error: "Invalid token" });
         }
     }

@@ -24,32 +24,37 @@ router.post('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(400).json({ error: "No token provided" });
     }
     else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        if (decoded) {
-            const body = req.body;
-            const transferHistoryRepo = data_source_1.AppDataSource.getRepository(Transfer_1.Transfer);
-            const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-            // cari user dengan id penerima dan pengirim
-            const userPenerima = yield userRepo.findOneBy({
-                id: parseInt(body.rekPenerima)
-            });
-            const userPengirim = yield userRepo.findOneBy({
-                id: parseInt(body.rekPengirim)
-            });
-            // kurangi saldo pengirim dan tambahkan saldo penerima
-            userPengirim.saldo -= parseFloat(body.nominal);
-            userPenerima.saldo += parseFloat(body.nominal);
-            // masukin history transfer
-            const transferHistory = new Transfer_1.Transfer();
-            transferHistory.userIDPengirim = userPengirim.id;
-            transferHistory.userIDPenerima = userPenerima.id;
-            transferHistory.nominal = parseFloat(body.nominal);
-            // save ke repo user dan transfer
-            yield userRepo.save([userPengirim, userPenerima]);
-            yield transferHistoryRepo.save(transferHistory);
-            res.status(200).json({ message: "Transfer success", success: true });
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            if (decoded) {
+                const body = req.body;
+                const transferHistoryRepo = data_source_1.AppDataSource.getRepository(Transfer_1.Transfer);
+                const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
+                // cari user dengan id penerima dan pengirim
+                const userPenerima = yield userRepo.findOneBy({
+                    id: parseInt(body.rekPenerima)
+                });
+                const userPengirim = yield userRepo.findOneBy({
+                    id: parseInt(body.rekPengirim)
+                });
+                // kurangi saldo pengirim dan tambahkan saldo penerima
+                userPengirim.saldo -= parseFloat(body.nominal);
+                userPenerima.saldo += parseFloat(body.nominal);
+                // masukin history transfer
+                const transferHistory = new Transfer_1.Transfer();
+                transferHistory.userIDPengirim = userPengirim;
+                transferHistory.userIDPenerima = userPenerima;
+                transferHistory.nominal = parseFloat(body.nominal);
+                // save ke repo user dan transfer
+                yield userRepo.save([userPengirim, userPenerima]);
+                yield transferHistoryRepo.save(transferHistory);
+                res.status(200).json({ message: "Transfer success", success: true });
+            }
+            else {
+                res.status(400).json({ error: "Invalid token" });
+            }
         }
-        else {
+        catch (_a) {
             res.status(400).json({ error: "Invalid token" });
         }
     }

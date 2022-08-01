@@ -31,8 +31,8 @@ router.post('/', cors(), async (req, res) => {
                 userPenerima.saldo += parseFloat(body.nominal);
                 // masukin history transfer
                 const transferHistory = new Transfer();
-                transferHistory.userIDPengirim = userPengirim.id;
-                transferHistory.userIDPenerima = userPenerima.id;
+                transferHistory.userIDPengirim = userPengirim;
+                transferHistory.userIDPenerima = userPenerima;
                 transferHistory.nominal = parseFloat(body.nominal);
                 // save ke repo user dan transfer
                 await userRepo.save([userPengirim, userPenerima]);

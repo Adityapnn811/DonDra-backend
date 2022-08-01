@@ -21,26 +21,31 @@ router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function
         res.status(400).json({ error: "No token provided" });
     }
     else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        if (decoded) {
-            const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
-            const moneytorings = yield moneytoringRepo.find({
-                where: {
-                    isVerified: false
-                }, select: {
-                    id: true,
-                    nominal: true,
-                    isIncome: true,
-                    transactionDate: true,
-                    user: {
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            if (decoded) {
+                const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
+                const moneytorings = yield moneytoringRepo.find({
+                    where: {
+                        isVerified: false
+                    }, select: {
                         id: true,
-                        nama: true,
+                        nominal: true,
+                        isIncome: true,
+                        transactionDate: true,
+                        user: {
+                            id: true,
+                            nama: true,
+                        }
                     }
-                }
-            });
-            res.status(200).json(moneytorings);
+                });
+                res.status(200).json(moneytorings);
+            }
+            else {
+                res.status(400).json({ error: "Invalid token" });
+            }
         }
-        else {
+        catch (_a) {
             res.status(400).json({ error: "Invalid token" });
         }
     }

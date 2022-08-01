@@ -22,25 +22,30 @@ router.get('/', cors(), (req, res) => __awaiter(void 0, void 0, void 0, function
         res.status(400).json({ error: "No token provided" });
     }
     else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        console.log(decoded.username);
-        if (decoded) {
-            const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-            const users = yield userRepo.find({
-                select: {
-                    id: true,
-                    nama: true,
-                    username: true,
-                    fotoKTP: true,
-                    isVerified: true,
-                    saldo: true,
-                }, where: {
-                    role: "user"
-                }
-            });
-            res.status(200).json(users);
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            console.log(decoded.username);
+            if (decoded) {
+                const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
+                const users = yield userRepo.find({
+                    select: {
+                        id: true,
+                        nama: true,
+                        username: true,
+                        fotoKTP: true,
+                        isVerified: true,
+                        saldo: true,
+                    }, where: {
+                        role: "user"
+                    }
+                });
+                res.status(200).json(users);
+            }
+            else {
+                res.status(400).json({ error: "Invalid token" });
+            }
         }
-        else {
+        catch (_a) {
             res.status(400).json({ error: "Invalid token" });
         }
     }

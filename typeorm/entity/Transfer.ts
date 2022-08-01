@@ -8,10 +8,10 @@ export class Transfer {
     id: number
 
     @ManyToOne(() => User)
-    userIDPengirim: number
+    userIDPengirim: User
 
     @ManyToOne(() => User)
-    userIDPenerima: number
+    userIDPenerima: User
 
     @Column("decimal", {
         precision: 10,

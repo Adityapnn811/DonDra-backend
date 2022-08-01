@@ -20,7 +20,7 @@ router.get('/:id', cors(), async (req, res) => {
                 const transferHistoryRepo = AppDataSource.getRepository(Transfer);
                 const moneytoringRepo = AppDataSource.getRepository(Moneytoring);
                 const userRepo = AppDataSource.getRepository(User);
-                // cari user dengan id 
+                // cari user dengan id
                 const userToBeChecked = await userRepo.findOneBy({
                     id: id
                 });
@@ -29,24 +29,30 @@ router.get('/:id', cors(), async (req, res) => {
                 // Cari history transfer
                 const transferHistoryMasuk = await transferHistoryRepo.find({
                     where: {
-                        userIDPenerima: id
+                        userIDPenerima: userToBeChecked
                     }, select: {
                         id: true,
                         nominal: true,
                         transferDate: true,
-                        userIDPengirim: true
+                        userIDPengirim: {
+                            id: true,
+                            nama: true,
+                        }
                     }
-                })
+                }).catch(err => console.log(err))
                 const transferHistoryKeluar = await transferHistoryRepo.find({
                     where: {
-                        userIDPengirim: id
+                        userIDPengirim: userToBeChecked
                     }, select: {
                         id: true,
                         nominal: true,
                         transferDate: true,
-                        userIDPenerima: true
+                        userIDPenerima: {
+                            id: true,
+                            nama: true,
+                        }
                     }
-                })
+                }).catch(err => console.log(err))
     
                 // Cari history moneytoring
                 const moneytoringHistory = await moneytoringRepo.find({
@@ -59,7 +65,7 @@ router.get('/:id', cors(), async (req, res) => {
                         transactionDate: true,
                         isVerified: true
                     }
-                })
+                }).catch(err => console.log(err))
     
                 res.status(200).json({transferMasuk: transferHistoryMasuk, transferKeluar: transferHistoryKeluar, moneytoringHistory: moneytoringHistory});
             } else {

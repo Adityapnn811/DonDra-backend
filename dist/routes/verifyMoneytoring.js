@@ -22,28 +22,33 @@ router.put("/:idMoneytoring", cors(), (req, res) => __awaiter(void 0, void 0, vo
         res.status(400).json({ error: "No token provided" });
     }
     else {
-        const decoded = jwt.verify(token, "dondraforbinomo");
-        if (decoded) {
-            const { idMoneytoring } = req.params;
-            const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
-            const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
-            const moneytoringToBeVerified = yield moneytoringRepo.findOneBy({
-                id: idMoneytoring
-            });
-            const user = yield userRepo.findOneBy({
-                id: moneytoringToBeVerified.user.id
-            });
-            if (moneytoringToBeVerified.isIncome) {
-                user.saldo += moneytoringToBeVerified.nominal;
+        try {
+            const decoded = jwt.verify(token, "dondraforbinomo");
+            if (decoded) {
+                const { idMoneytoring } = req.params;
+                const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
+                const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
+                const moneytoringToBeVerified = yield moneytoringRepo.findOneBy({
+                    id: idMoneytoring
+                });
+                const user = yield userRepo.findOneBy({
+                    id: moneytoringToBeVerified.user.id
+                });
+                if (moneytoringToBeVerified.isIncome) {
+                    user.saldo += moneytoringToBeVerified.nominal;
+                }
+                else {
+                    user.saldo -= moneytoringToBeVerified.nominal;
+                }
+                moneytoringToBeVerified.isVerified = true;
+                yield moneytoringRepo.save(moneytoringToBeVerified);
+                res.status(200).send({ success: true, message: "Moneytoring has been verified" });
             }
             else {
-                user.saldo -= moneytoringToBeVerified.nominal;
+                res.status(400).json({ error: "Invalid token" });
             }
-            moneytoringToBeVerified.isVerified = true;
-            yield moneytoringRepo.save(moneytoringToBeVerified);
-            res.status(200).send({ success: true, message: "Moneytoring has been verified" });
         }
-        else {
+        catch (_a) {
             res.status(400).json({ error: "Invalid token" });
         }
     }
