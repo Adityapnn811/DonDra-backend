@@ -57,3 +57,4 @@ All of the endpoints require token authentication except for login and register.
 # Notes
 1. The token is valid for 24 hours
 2. If you want to use your own `REDIS_URL` or `DATABASE_URL` or `PORT` variables, you can create `.env` file in the root directory and add it
+3. This backend is deployed under <a>dondra-backend.herokuapp.com</a>
