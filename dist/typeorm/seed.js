@@ -8,24 +8,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const data_source_1 = require("./data-source");
 const User_1 = require("./entity/User");
 const Moneytoring_1 = require("./entity/Moneytoring");
-const bcrypt = require('bcrypt');
+const bcrypt_1 = __importDefault(require("bcrypt"));
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 data_source_1.AppDataSource.initialize().then(() => __awaiter(void 0, void 0, void 0, function* () {
     //generate salt
-    const salt = yield bcrypt.genSalt(10);
+    const salt = yield bcrypt_1.default.genSalt(10);
     // create user repo
     const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
     let user = new User_1.User();
     user.nama = "Admin Ganteng";
     user.username = "admin";
-    user.password = yield bcrypt.hash("admin", salt);
+    user.password = yield bcrypt_1.default.hash("admin", salt);
     user.fotoKTP = "gambar";
     user.role = User_1.UserRole.ADMIN;
     user.isVerified = true;
@@ -35,7 +38,7 @@ data_source_1.AppDataSource.initialize().then(() => __awaiter(void 0, void 0, vo
     user = new User_1.User();
     user.nama = "User Ganteng";
     user.username = "usergans";
-    user.password = yield bcrypt.hash("usergans", salt);
+    user.password = yield bcrypt_1.default.hash("usergans", salt);
     user.fotoKTP = "gambar";
     user.role = User_1.UserRole.USER;
     user.saldo = 100000;

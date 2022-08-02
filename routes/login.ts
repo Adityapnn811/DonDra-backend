@@ -2,7 +2,7 @@ import { User } from "../typeorm/entity/User";
 import { AppDataSource } from "../typeorm/data-source";
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 

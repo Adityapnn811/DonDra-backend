@@ -32,3 +32,7 @@ ssl: true,
 # DESIGN PATTERN
 1. Factory
 Factory digunakan untuk melakukan inisiasi database (seeding)
+Design pattern:
+- Singleton (jwt)
+- Observer database, sama app.use, jadi kita punya banyak router trus app jadi observer dan dia use router yang diimpor
+- Factory seeding

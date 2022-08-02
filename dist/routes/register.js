@@ -8,12 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const User_1 = require("../typeorm/entity/User");
 const data_source_1 = require("../typeorm/data-source");
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const fs = require('fs');
 const cors = require('cors');
 router.post("/", cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -27,7 +30,7 @@ router.post("/", cors(), (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(400).json({ error: "Data is not complete, server couldn't parse it" });
         return;
     }
-    const salt = yield bcrypt.genSalt(10);
+    const salt = yield bcrypt_1.default.genSalt(10);
     userToBeRegistered.nama = body.nama;
     // check if username already exists (belom)
     if (yield userRepo.findOneBy({ username: body.username })) {
@@ -35,7 +38,7 @@ router.post("/", cors(), (req, res) => __awaiter(void 0, void 0, void 0, functio
         return;
     }
     userToBeRegistered.username = body.username;
-    userToBeRegistered.password = yield bcrypt.hash(body.password, salt);
+    userToBeRegistered.password = yield bcrypt_1.default.hash(body.password, salt);
     userToBeRegistered.fotoKTP = body.fotoKTP;
     // convert base64 to png
     const base64Data = body.fotoKTP.replace(/^data:([A-Za-z-+/]+);base64,/, '');

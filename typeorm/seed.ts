@@ -2,7 +2,7 @@ import "reflect-metadata"
 import { AppDataSource } from "./data-source"
 import { User, UserRole } from "./entity/User"
 import { Moneytoring } from "./entity/Moneytoring";
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();

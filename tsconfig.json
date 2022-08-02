@@ -1,9 +1,7 @@
 {
    "compilerOptions": {
       "lib": [
-         "es5",
-         "es6",
-         "es2015"
+         "es6"
       ],
       "target": "es6",
       "module": "commonjs",
@@ -13,5 +11,7 @@
       "experimentalDecorators": true,
       "sourceMap": true,
       "esModuleInterop": true,
-   }
+   },
+   "include": ["**/*"],
+   "exclude": ["node_modules", "**/*.spec.ts"]
 }

@@ -22,7 +22,3 @@ DOCKERIZEEE!!!
 - Tabel Moneytoring
 (UserId, Nominal, IsIncome, IsVerified, transactionDate)
 
-Design pattern:
-- Singleton (jwt)
-- Observer database, sama app.use, jadi kita punya banyak router trus app jadi observer dan dia use router yang diimpor
-- Factory seeding

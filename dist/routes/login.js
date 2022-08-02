@@ -8,12 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const User_1 = require("../typeorm/entity/User");
 const data_source_1 = require("../typeorm/data-source");
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 router.post("/", cors(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -23,7 +26,7 @@ router.post("/", cors(), (req, res) => __awaiter(void 0, void 0, void 0, functio
     if (userToCheck) {
         // check if user is verified
         // check if password is correct
-        const correctPass = yield bcrypt.compare(body.password, userToCheck.password);
+        const correctPass = yield bcrypt_1.default.compare(body.password, userToCheck.password);
         if (correctPass && userToCheck.isVerified) {
             // create jwt token
             let token = jwt.sign({ username: userToCheck.username }, "dondraforbinomo", { expiresIn: '24h' });
