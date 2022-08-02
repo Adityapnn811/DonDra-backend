@@ -23,7 +23,7 @@ This is a repository for the backend of DonDra project.
 4. Jest (v28.1.3)
 5. Node JS (v16.13.1)
 6. PostgreSQL (v12.2.0)
-7. Redis
+7. Redis (using Upstash)
 
 # DESIGN PATTERN
 1. Factory
