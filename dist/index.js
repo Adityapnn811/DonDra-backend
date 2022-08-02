@@ -63,7 +63,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 // initialize redis
 data_source_1.AppDataSource.initialize().then(() => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("Here you can setup and run express / fastify / any other framework.");
     app.get("/", (req, res) => {
         res.send("Berhasil deploy").status(200);
     });

@@ -23,7 +23,6 @@ router.put("/:id", cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
     else {
         try {
             const decoded = jwt.verify(token, "dondraforbinomo");
-            console.log(decoded.username);
             if (decoded) {
                 const { id } = req.params;
                 const userRepo = data_source_1.AppDataSource.getRepository(User_1.User);
