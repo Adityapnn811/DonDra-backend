@@ -27,6 +27,11 @@ router.get('/:id', cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
         try {
             const decoded = jwt.verify(token, "dondraforbinomo");
             if (decoded) {
+                // get request query, default take adalah 5, default page adalah 1
+                const limit = 5;
+                const page = parseInt(req.query.page) || 1;
+                const startIndex = (page - 1) * limit;
+                const endIndex = page * limit;
                 const { id } = req.params;
                 const transferHistoryRepo = data_source_1.AppDataSource.getRepository(Transfer_1.Transfer);
                 const moneytoringRepo = data_source_1.AppDataSource.getRepository(Moneytoring_1.Moneytoring);
@@ -67,11 +72,45 @@ router.get('/:id', cors(), (req, res) => __awaiter(void 0, void 0, void 0, funct
                         nominal: true,
                         isIncome: true,
                         transactionDate: true,
-                        isVerified: true
+                        isVerified: true,
+                        isRejected: true
                     }
                 }).catch(err => console.log(err));
-                console.log(moneytoringHistory);
-                res.status(200).json({ transferMasuk: transferHistoryMasuk, transferKeluar: transferHistoryKeluar, moneytoringHistory: moneytoringHistory });
+                // Jadikan satu
+                const history = [];
+                if (transferHistoryMasuk) {
+                    transferHistoryMasuk.forEach(transfer => {
+                        history.push(transfer);
+                    });
+                }
+                if (transferHistoryKeluar) {
+                    transferHistoryKeluar.forEach(transfer => {
+                        history.push(transfer);
+                    });
+                }
+                if (moneytoringHistory) {
+                    moneytoringHistory.forEach(transfer => {
+                        history.push(transfer);
+                    });
+                }
+                // Buat variabel yang menampung meta data (page sebelum dan setelah) sama data
+                const result = {
+                    prev: null,
+                    next: null,
+                    data: []
+                };
+                // Hitung page selanjut dan sebelum
+                if (startIndex > 0) {
+                    result.prev = page - 1;
+                }
+                if (endIndex < history.length) {
+                    result.next = page + 1;
+                }
+                result.data = history.slice(startIndex, endIndex);
+                if (history[1].isIncome != undefined) {
+                    console.log("dia transfer");
+                }
+                res.status(200).json({ success: true, result: result, total: history.length, currentPage: page, limit: limit });
             }
             else {
                 res.status(400).json({ error: "Invalid token" });
