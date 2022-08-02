@@ -101,9 +101,6 @@ router.get('/:id', cors(), async (req, res) => {
                     result.next = page+1
                 }
                 result.data = history.slice(startIndex, endIndex);
-                if (history[1].isIncome != undefined) {
-                    console.log("dia transfer")
-                }
                 res.status(200).json({success: true, result: result, total: history.length, currentPage: page, limit: limit});
             } else {
                 res.status(400).json({error: "Invalid token"});

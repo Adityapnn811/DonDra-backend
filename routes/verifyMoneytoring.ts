@@ -25,7 +25,6 @@ router.put("/:idMoneytoring", cors(), async (req, res) => {
                     }
                 });
                 // cek apakah admin menolak atau menyetujui
-                console.log(body.isRejected)
                 if (body.isRejected) {
                     moneytoringToBeVerified.isRejected = true;
                 } else {

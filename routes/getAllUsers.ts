@@ -13,7 +13,6 @@ router.get('/', cors(), async (req, res) => {
     } else {
         try {
             const decoded = jwt.verify(token, "dondraforbinomo");
-            console.log(decoded.username)
             if (decoded) {
                 const userRepo = AppDataSource.getRepository(User);
                 const users = await userRepo.find({
@@ -46,7 +45,6 @@ router.get('/:id', cors(), async (req, res) => {
     } else {
         try {
             const decoded = jwt.verify(token, "dondraforbinomo");
-            console.log(decoded.username)
             if (decoded) {
                 const userRepo = AppDataSource.getRepository(User);
                 const user = await userRepo.findOneBy({
