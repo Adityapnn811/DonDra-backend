@@ -26,11 +26,11 @@ This is a repository for the backend of DonDra project.
 7. Redis (using Upstash)
 
 # DESIGN PATTERN
-1. Factory
+1. Factory<br />
 Factory digunakan untuk melakukan inisiasi database (seeding). Factory ini akan membuat objek yang diubah menjadi data yang akan diinsert ke database.
-2. Singleton
+2. Singleton<br />
 Singleton digunakan pada objek jwt. Objek jwt hanya ada satu instance yang bertugas memverifikasi token dan membuat token.
-3. Observer
+3. Observer<br />
 Design pattern observer digunakan dalam pembuatan route/endpoint. Observer dalam konteks ini adalah objek app yang kemudian dapat ditambahkan endpoint/router yang sudah dibuat.
 
 # Endpoints
